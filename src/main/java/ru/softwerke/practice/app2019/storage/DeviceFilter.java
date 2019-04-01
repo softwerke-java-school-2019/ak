@@ -1,7 +1,9 @@
 package ru.softwerke.practice.app2019.storage;
 
-import java.awt.*;
+import ru.softwerke.practice.app2019.model.Color;
+
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,7 +15,7 @@ public class DeviceFilter {
     private BigDecimal priceTo;
     private String model;
     private Color color;
-    private Date date;
+    private LocalDateTime date;
     private String manufacturer;
 
     public UUID getId() {
@@ -36,7 +38,7 @@ public class DeviceFilter {
         return color;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -69,7 +71,7 @@ public class DeviceFilter {
         return this;
     }
 
-    public DeviceFilter withDate(Date date) {
+    public DeviceFilter withDate(LocalDateTime date) {
         this.date = date;
         return this;
     }
