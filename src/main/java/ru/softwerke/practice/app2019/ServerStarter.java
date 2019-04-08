@@ -54,6 +54,15 @@ public class ServerStarter {
         staticServletHolder.setInitParameter("dirAllowed", "false");
         staticServletHolder.setInitParameter("fileEncoding", "utf-8");
 
+//        staticServletHolder.setInitParameter(
+//                "jersey.config.server.provider.classnames",
+//                DeviceRestController.class.getCanonicalName() + ", " +
+//                        com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider.class.getCanonicalName());
+//
+//
+//        staticServletHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
+//
+
         ctx.addServlet(staticServletHolder, "/");
 
         server.setHandler(ctx);

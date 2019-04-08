@@ -1,14 +1,14 @@
 package ru.softwerke.practice.app2019.storage;
 
-import ru.softwerke.practice.app2019.model.Device;
+import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface Storage {
-     UUID saveDevice(Device device);
+public interface Storage<T extends Unique> {
+    UUID save(T device);
 
-     List<Device> getDevices(DeviceFilter filter);
+    List<T> get(StorageFilter<T> filter);
 
-     Device getDevice(UUID id);
+    T get(UUID id);
 }

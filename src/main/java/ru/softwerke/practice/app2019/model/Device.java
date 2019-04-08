@@ -2,23 +2,23 @@ package ru.softwerke.practice.app2019.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ru.softwerke.practice.app2019.storage.Unique;
 
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Device {
-    public static final String ID_FIELD = "id";
-    public static final String PRICE_FIELD = "price";
-    public static final String MODEL_FIELD = "model";
-    public static final String COLOR_FIELD = "color";
-    public static final String DATE_FIELD = "date";
-    public static final String MANUFACTURER_FIELD = "manufacturer";
+public class Device implements Unique {
+    private static final String ID_FIELD = "id";
+    private static final String PRICE_FIELD = "price";
+    private static final String MODEL_FIELD = "model";
+    private static final String COLOR_FIELD = "color";
+    private static final String DATE_FIELD = "date";
+    private static final String MANUFACTURER_FIELD = "manufacturer";
 
     @JsonProperty(ID_FIELD)
     private UUID id;
@@ -33,8 +33,9 @@ public class Device {
     private final Color color;
 
     @JsonProperty(DATE_FIELD)
-    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-    private final LocalDateTime date;
+    @JsonSerialize(using = DateSeriailizer.class)
+    @JsonDeserialize(using = DateDeserializer.class)
+    private final LocalDate date;
 
     @JsonProperty(MANUFACTURER_FIELD)
     private final String manufacturer;
@@ -44,19 +45,20 @@ public class Device {
             @NotNull @JsonProperty(PRICE_FIELD) BigDecimal price,
             @NotNull @JsonProperty(MODEL_FIELD) String model,
             @NotNull @JsonProperty(COLOR_FIELD) Color color,
-            @NotNull @JsonProperty(DATE_FIELD) LocalDateTime date,
+            @NotNull @JsonProperty(DATE_FIELD) LocalDate date,
             @NotNull @JsonProperty(MANUFACTURER_FIELD) String manufacturer) {
         this.price = price;
         this.model = model;
         this.color = color;
-        this.date = date;
         this.manufacturer = manufacturer;
+        this.date = date;
     }
 
     public void setId(UUID id) {
         this.id = id;
     }
 
+    @Override
     public UUID getId() {
         return id;
     }
@@ -73,7 +75,7 @@ public class Device {
         return color;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -110,5 +112,6 @@ public class Device {
                 ", manufacturer='" + manufacturer + '\'' +
                 '}';
     }
+
 
 }

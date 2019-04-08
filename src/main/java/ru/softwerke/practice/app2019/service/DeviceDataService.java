@@ -1,13 +1,13 @@
 package ru.softwerke.practice.app2019.service;
 
 import ru.softwerke.practice.app2019.model.Device;
-import ru.softwerke.practice.app2019.storage.DeviceFilter;
+import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface DeviceDataService {
-    UUID putDevice(Device device);
+    UUID saveDevice(Device device);
 
     Device getDeviceById(UUID id);
 

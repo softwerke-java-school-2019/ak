@@ -1,49 +1,44 @@
 package ru.softwerke.practice.app2019.storage;
 
-import org.glassfish.jersey.internal.util.Producer;
-import ru.softwerke.practice.app2019.model.Device;
+import ru.softwerke.practice.app2019.storage.filter.Conditional;
+import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class RuntimeStorage implements Storage {
-    private List<Device> devices = new ArrayList<>();
-
-    @Override
-    public UUID saveDevice(Device device) {
-        UUID deviceId = UUID.randomUUID();
-        device.setId(deviceId);
-        devices.add(device);
-        return device.getId();
-    }
+public class RuntimeStorage<T extends Unique> implements Storage<T> {
+    private List<T> objects = new CopyOnWriteArrayList<>();
 
     @Override
-    public List<Device> getDevices(DeviceFilter filter) {
-        return devices.stream().filter(device -> filterDevice(filter, device)).collect(Collectors.toList());
+    public UUID save(T device) {
+        UUID objectId = UUID.randomUUID();
+        objects.add(device);
+        return objectId;
     }
 
     @Override
-    public Device getDevice(UUID id) {
-        return devices.stream().filter(device -> device.getId().equals(id)).findFirst().orElse(null);
-    }
+    public List<T> get(StorageFilter<T> filter) {
+        Stream<T> objectStream = objects.stream();
 
-    private static boolean filterDevice(DeviceFilter filter, Device device) {
-        return (isEqual(filter::getDate, device::getDate)
-                && isEqual(filter::getManufacturer, device::getManufacturer)
-                && isEqual(filter::getModel, device::getModel)
-                && isEqual(filter::getColor, device::getColor)
-                && (filter.getPriceFrom() == null || device.getPrice().compareTo(filter.getPriceFrom()) >= 0)
-                && (filter.getPriceTo() == null || device.getPrice().compareTo(filter.getPriceTo()) <= 0));
-    }
-
-    private static <T> boolean isEqual(Producer<T> f1, Producer<T> f2) {
-        T v1 = f1.call();
-        T v2 = f2.call();
-        if (v1 == null) {
-            return true;
+        List<Conditional<T>> conditions = filter.getConditions();
+        for (Conditional<T> conditional : conditions) {
+            objectStream = objectStream.filter(conditional::accept);
         }
-        return v1.equals(v2);
+
+        List<Comparator<T>> sorting = filter.getSortings();
+        for (Comparator<T> sort : sorting) {
+            objectStream = objectStream.sorted(sort);
+        }
+
+        return objectStream.collect(Collectors.toList());
+    }
+
+    @Override
+    public T get(UUID id) {
+        return objects.stream().filter(device -> device.getId().equals(id)).findFirst().orElse(null);
     }
 }
