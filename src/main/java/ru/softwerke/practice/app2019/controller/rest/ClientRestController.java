@@ -4,6 +4,7 @@ import ru.softwerke.practice.app2019.model.Client;
 import ru.softwerke.practice.app2019.model.DateDeserializer;
 import ru.softwerke.practice.app2019.service.ClientDataService;
 import ru.softwerke.practice.app2019.service.ClientFilter;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,25 +29,20 @@ public class ClientRestController {
                                    @QueryParam("lastName") String lastName,
                                    @QueryParam("patronymic") String patronymic,
                                    @QueryParam("birthDateFrom") String birthDateFromStr,
-                                   @QueryParam("birthDateTo") String birthDateToStr) {
+                                   @QueryParam("birthDateTo") String birthDateToStr,
+                                   @QueryParam("sortBy") String sortBy) {
 
-        LocalDate birthDateFrom = null;
-        LocalDate birthDateTo = null;
-
-        if (birthDateFromStr != null) {
-            birthDateFrom = LocalDate.parse(birthDateFromStr, DateDeserializer.formatter);
-        }
-
-        if (birthDateToStr != null) {
-            birthDateTo = LocalDate.parse(birthDateToStr, DateDeserializer.formatter);
-        }
+        LocalDate birthDateFrom = ParsingUtil.getLocalDate(birthDateFromStr);;
+        LocalDate birthDateTo = ParsingUtil.getLocalDate(birthDateToStr);
+        List<SortConditional> sortConditionals = ParsingUtil.getSortParams(sortBy);
 
         ClientFilter filter = new ClientFilter()
                 .withFirstName(firstName)
                 .withLastName(lastName)
                 .withPatronymic(patronymic)
                 .withBirthDateFrom(birthDateFrom)
-                .withBirthDateTo(birthDateTo);
+                .withBirthDateTo(birthDateTo)
+                .withSortParams(sortConditionals);
 
         return clientDataService.getClients(filter);
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DeviceDataService {
-    UUID saveDevice(Device device);
+    Device saveDevice(Device device);
 
     Device getDeviceById(UUID id);
 

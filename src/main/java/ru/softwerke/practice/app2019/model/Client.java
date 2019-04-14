@@ -6,9 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ru.softwerke.practice.app2019.storage.Unique;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortableFieldProvider;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -18,6 +21,9 @@ public class Client implements Unique {
     private static final String LAST_NAME_FIELD = "lastName";
     private static final String PATRONYMIC_FIELD = "patronymic";
     private static final String BIRTH_DATE_FIELD = "birthDate";
+
+    public static final SortableFieldProvider<Client> FIELD_PROVIDER = new ClientSortableFieldProvider();
+
 
     @JsonProperty(ID_FIELD)
     private UUID id;
@@ -99,6 +105,28 @@ public class Client implements Unique {
                 ", patronymic='" + patronymic + '\'' +
                 ", birthDate=" + birthDate +
                 '}';
+    }
+
+    public static class ClientSortableFieldProvider implements SortableFieldProvider<Client> {
+
+        private ClientSortableFieldProvider() {
+        }
+
+        @Override
+        public Comparator<Client> getSortConditional(SortConditional sortConditional) {
+            switch (sortConditional.getField()) {
+                case FIRST_NAME_FIELD:
+                    return Comparator.comparing(Client::getFirstName);
+                case LAST_NAME_FIELD:
+                    return Comparator.comparing(Client::getLastName);
+                case PATRONYMIC_FIELD:
+                    return Comparator.comparing(Client::getPatronymic);
+                case BIRTH_DATE_FIELD:
+                    return Comparator.comparing(Client::getBirthDate);
+                default:
+                    throw new IllegalArgumentException("Unexpected sort param " + sortConditional.getField());
+            }
+        }
     }
 }
 

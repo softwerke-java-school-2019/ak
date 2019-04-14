@@ -1,9 +1,12 @@
 package ru.softwerke.practice.app2019.service;
 
 import ru.softwerke.practice.app2019.model.Color;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DeviceFilter {
@@ -17,6 +20,7 @@ public class DeviceFilter {
     private LocalDate dateFrom;
     private LocalDate dateTo;
     private String manufacturer;
+    private List<SortConditional> sortConditionals = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -47,6 +51,8 @@ public class DeviceFilter {
     public String getManufacturer() {
         return manufacturer;
     }
+
+    public List<SortConditional> getSortConditionals() { return sortConditionals; }
 
     public DeviceFilter withId(UUID id) {
         this.id = id;
@@ -88,4 +94,8 @@ public class DeviceFilter {
         return this;
     }
 
+    public DeviceFilter withSortConditionals(List<SortConditional> sortConditionals){
+        this.sortConditionals = sortConditionals;
+        return this;
+    }
 }

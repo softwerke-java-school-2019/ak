@@ -1,10 +1,10 @@
 package ru.softwerke.practice.app2019.controller.rest;
 
 import ru.softwerke.practice.app2019.model.Color;
-import ru.softwerke.practice.app2019.model.DateDeserializer;
 import ru.softwerke.practice.app2019.model.Device;
 import ru.softwerke.practice.app2019.service.DeviceDataService;
 import ru.softwerke.practice.app2019.service.DeviceFilter;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -33,18 +33,12 @@ public class DeviceRestController {
                                    @QueryParam("dateFrom") String dateFromStr,
                                    @QueryParam("dateTo") String dateToStr,
                                    @QueryParam("model") String model,
-                                   @QueryParam("manufacturer") String manufacturer) {
+                                   @QueryParam("manufacturer") String manufacturer,
+                                   @QueryParam("sortBy") String sortBy) {
 
-        LocalDate dateFrom = null;
-        LocalDate dateTo = null;
-
-        if (dateFromStr != null) {
-            dateFrom = LocalDate.parse(dateFromStr, DateDeserializer.formatter);
-        }
-
-        if (dateToStr != null) {
-            dateTo = LocalDate.parse(dateToStr, DateDeserializer.formatter);
-        }
+        LocalDate dateFrom = ParsingUtil.getLocalDate(dateFromStr);
+        LocalDate dateTo = ParsingUtil.getLocalDate(dateToStr);
+        List<SortConditional> sortConditionals = ParsingUtil.getSortParams(sortBy);
 
         DeviceFilter filter = new DeviceFilter()
                 .withPriceFrom(priceFrom)
@@ -53,7 +47,8 @@ public class DeviceRestController {
                 .withDateFrom(dateFrom)
                 .withDateTo(dateTo)
                 .withModel(model)
-                .withManufacturer(manufacturer);
+                .withManufacturer(manufacturer)
+                .withSortConditionals(sortConditionals);
 
         return deviceDataService.getDevices(filter);
 
@@ -69,9 +64,7 @@ public class DeviceRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Device createDevice(Device device) {
-        UUID deviceId = deviceDataService.saveDevice(device);
-        device.setId(deviceId);
-        return device;
+        return deviceDataService.saveDevice(device);
     }
 
     @GET

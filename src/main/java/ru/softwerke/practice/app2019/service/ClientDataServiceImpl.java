@@ -1,14 +1,13 @@
 package ru.softwerke.practice.app2019.service;
 
 import ru.softwerke.practice.app2019.model.Client;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 import ru.softwerke.practice.app2019.storage.Storage;
 import ru.softwerke.practice.app2019.storage.filter.ComparisonConditional;
-import ru.softwerke.practice.app2019.storage.filter.Conditional;
 import ru.softwerke.practice.app2019.storage.filter.FilterCondition;
 import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,34 +33,22 @@ public class ClientDataServiceImpl implements ClientDataService {
         StorageFilter<Client> storageFilter = new StorageFilter<>();
 
         if (filter.getFirstName() != null) {
-            storageFilter.addCondition(
-                    new FilterCondition<>(Client::getFirstName, ComparisonConditional.eq(filter.getFirstName()))
-            );
+            storageFilter.addCondition(FilterCondition.on(Client::getFirstName).eq(filter.getFirstName()));
         }
 
         if (filter.getLastName() != null) {
-            storageFilter.addCondition(
-                    new FilterCondition<>(Client::getLastName, ComparisonConditional.eq(filter.getLastName()))
-            );
+            storageFilter.addCondition(FilterCondition.on(Client::getLastName).eq(filter.getLastName()));
         }
 
         if (filter.getPatronymic() != null) {
-            storageFilter.addCondition(
-                    new FilterCondition<>(Client::getPatronymic, ComparisonConditional.eq(filter.getPatronymic()))
-            );
+            storageFilter.addCondition(FilterCondition.on(Client::getPatronymic).eq(filter.getPatronymic()));
         }
 
-        List<Conditional<LocalDate>> birthDateRange = new ArrayList<>(2);
-        if (filter.getBirthDateFrom() != null) {
-            birthDateRange.add(ComparisonConditional.greaterOrEq(filter.getBirthDateFrom()));
-        }
-        if (filter.getBirthDateTo() != null) {
-            birthDateRange.add(ComparisonConditional.lessOrEq(filter.getBirthDateTo()));
-        }
-        if (!birthDateRange.isEmpty()) {
-            storageFilter.addCondition(new FilterCondition<>(Client::getBirthDate, birthDateRange));
-        }
+        storageFilter.addCondition(FilterCondition.on(Client::getBirthDate).inRange(filter.getBirthDateFrom(), filter.getBirthDateTo()));
+
+        storageFilter.addAllSorting(Client.FIELD_PROVIDER, filter.getSortConditionals());
 
         return storage.get(storageFilter);
     }
+
 }

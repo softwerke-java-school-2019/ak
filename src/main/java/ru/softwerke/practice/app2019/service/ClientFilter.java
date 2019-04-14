@@ -1,9 +1,10 @@
 package ru.softwerke.practice.app2019.service;
 
-import ru.softwerke.practice.app2019.model.Color;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ClientFilter {
@@ -15,6 +16,7 @@ public class ClientFilter {
     private String patronymic;
     private LocalDate birthDateFrom;
     private LocalDate birthDateTo;
+    private List<SortConditional> sortConditionals = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -31,6 +33,8 @@ public class ClientFilter {
     }
 
     public LocalDate getBirthDateTo() { return birthDateTo; }
+
+    public List<SortConditional> getSortConditionals() { return sortConditionals; }
 
     public ClientFilter withId(UUID id) {
         this.id = id;
@@ -59,6 +63,11 @@ public class ClientFilter {
 
     public ClientFilter withBirthDateTo(LocalDate birthDateTo) {
         this.birthDateTo = birthDateTo;
+        return this;
+    }
+
+    public ClientFilter withSortParams(List<SortConditional> sortConditionals){
+        this.sortConditionals = sortConditionals;
         return this;
     }
 

@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ru.softwerke.practice.app2019.storage.Unique;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
+import ru.softwerke.practice.app2019.storage.filter.sorting.SortableFieldProvider;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -19,6 +22,8 @@ public class Device implements Unique {
     private static final String COLOR_FIELD = "color";
     private static final String DATE_FIELD = "date";
     private static final String MANUFACTURER_FIELD = "manufacturer";
+
+    public static final SortableFieldProvider<Device> FIELD_PROVIDER = new DeviceSortableFieldProvider();
 
     @JsonProperty(ID_FIELD)
     private UUID id;
@@ -113,5 +118,27 @@ public class Device implements Unique {
                 '}';
     }
 
+    public static class DeviceSortableFieldProvider implements SortableFieldProvider<Device> {
 
+        private DeviceSortableFieldProvider() {
+        }
+
+        @Override
+        public Comparator<Device> getSortConditional(SortConditional sortConditional) {
+            switch (sortConditional.getField()) {
+                case PRICE_FIELD:
+                    return Comparator.comparing(Device::getPrice);
+                case MODEL_FIELD:
+                    return Comparator.comparing(Device::getModel);
+                case DATE_FIELD:
+                    return Comparator.comparing(Device::getDate);
+                case MANUFACTURER_FIELD:
+                    return Comparator.comparing(Device::getManufacturer);
+                case COLOR_FIELD:
+                    return Comparator.comparing(Device::getColor);
+                default:
+                    throw new IllegalArgumentException("Unexpected sort param " + sortConditional.getField());
+            }
+        }
+    }
 }
