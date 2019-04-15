@@ -61,7 +61,12 @@ public class ClientRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Client createClient(Client client) {
-        return clientDataService.saveClient(client);
+        try {
+            ModelUtil.checkClient(client);
+            return clientDataService.saveClient(client);
+        }catch (NullPointerException e){
+            throw new NullPointerException("json absents");
+        }
     }
 
     @GET

@@ -64,7 +64,11 @@ public class BillRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Bill createBill(Bill bill) {
-        return billDataService.saveBill(bill);
+        try {
+            return billDataService.saveBill(bill);
+        }catch (NullPointerException e){
+            throw new NullPointerException("json absents");
+        }
     }
 
     @GET

@@ -1,5 +1,7 @@
 package ru.softwerke.practice.app2019.controller.rest;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import ru.softwerke.practice.app2019.model.Color;
 import ru.softwerke.practice.app2019.model.Device;
 import ru.softwerke.practice.app2019.service.DeviceDataService;
@@ -67,14 +69,24 @@ public class DeviceRestController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Device createDevice(Device device) {
-        return deviceDataService.saveDevice(device);
+    public Device createDevice(Device device){
+        try {
+            ModelUtil.checkDevice(device);
+            return deviceDataService.saveDevice(device);
+        }catch (NullPointerException e){
+            throw new NullPointerException("json absents");
+        }
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Device getDevice(@PathParam("id") UUID id) {
-        return deviceDataService.getDeviceById(id);
+        try {
+            return deviceDataService.getDeviceById(id);
+        }catch(NullPointerException e) {
+            throw new NullPointerException("no device found with id = " + id);
+        }
     }
 }
+
