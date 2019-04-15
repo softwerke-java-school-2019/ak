@@ -2,7 +2,7 @@ package ru.softwerke.practice.app2019.service;
 
 import ru.softwerke.practice.app2019.model.Device;
 import ru.softwerke.practice.app2019.storage.Storage;
-import ru.softwerke.practice.app2019.storage.filter.FilterCondition;
+import ru.softwerke.practice.app2019.storage.filter.FilterConditional;
 import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 
 import java.util.List;
@@ -17,7 +17,9 @@ public class DeviceDataServiceImpl implements DeviceDataService {
 
     @Override
     public Device saveDevice(Device device) {
-        device.setId(storage.save(device));
+        UUID id = UUID.randomUUID();
+        device.setId(id);
+        storage.save(device);
         return device;
     }
 
@@ -31,22 +33,23 @@ public class DeviceDataServiceImpl implements DeviceDataService {
         StorageFilter<Device> storageFilter = new StorageFilter<>();
 
         if (filter.getManufacturer() != null) {
-            storageFilter.addCondition(FilterCondition.on(Device::getManufacturer).eq(filter.getManufacturer()));
+            storageFilter.addCondition(FilterConditional.on(Device::getManufacturer).eq(filter.getManufacturer()));
         }
 
         if (filter.getModel() != null) {
-            storageFilter.addCondition(FilterCondition.on(Device::getModel).eq(filter.getModel()));
+            storageFilter.addCondition(FilterConditional.on(Device::getModel).eq(filter.getModel()));
         }
 
         if (filter.getColor() != null) {
-            storageFilter.addCondition(FilterCondition.on(Device::getColor).eq(filter.getColor()));
+            storageFilter.addCondition(FilterConditional.on(Device::getColor).eq(filter.getColor()));
         }
 
-        storageFilter.addCondition(FilterCondition.on(Device::getPrice).inRange(filter.getPriceFrom(), filter.getPriceTo()));
-        storageFilter.addCondition(FilterCondition.on(Device::getDate).inRange(filter.getDateFrom(), filter.getDateTo()));
+        storageFilter.addCondition(FilterConditional.on(Device::getPrice).inRange(filter.getPriceFrom(), filter.getPriceTo()));
+        storageFilter.addCondition(FilterConditional.on(Device::getDate).inRange(filter.getDateFrom(), filter.getDateTo()));
 
         storageFilter.addAllSorting(Device.FIELD_PROVIDER, filter.getSortConditionals());
-
+        storageFilter.setCount(filter.getCount());
+        storageFilter.setPageNumber(filter.getPageNumber());
         return storage.get(storageFilter);
     }
 }

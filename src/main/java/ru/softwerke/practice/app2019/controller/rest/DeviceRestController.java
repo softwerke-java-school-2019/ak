@@ -34,7 +34,9 @@ public class DeviceRestController {
                                    @QueryParam("dateTo") String dateToStr,
                                    @QueryParam("model") String model,
                                    @QueryParam("manufacturer") String manufacturer,
-                                   @QueryParam("sortBy") String sortBy) {
+                                   @QueryParam("sortBy") String sortBy,
+                                   @DefaultValue("50") @QueryParam("count") int count,
+                                   @DefaultValue("0") @QueryParam("pageNumber") int pageNumber) {
 
         LocalDate dateFrom = ParsingUtil.getLocalDate(dateFromStr);
         LocalDate dateTo = ParsingUtil.getLocalDate(dateToStr);
@@ -48,7 +50,9 @@ public class DeviceRestController {
                 .withDateTo(dateTo)
                 .withModel(model)
                 .withManufacturer(manufacturer)
-                .withSortConditionals(sortConditionals);
+                .withSortConditionals(sortConditionals)
+                .withCount(count)
+                .withPageNumber(pageNumber);
 
         return deviceDataService.getDevices(filter);
 

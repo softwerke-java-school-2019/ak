@@ -1,7 +1,6 @@
 package ru.softwerke.practice.app2019.controller.rest;
 
 import ru.softwerke.practice.app2019.model.Client;
-import ru.softwerke.practice.app2019.model.DateDeserializer;
 import ru.softwerke.practice.app2019.service.ClientDataService;
 import ru.softwerke.practice.app2019.service.ClientFilter;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
@@ -25,12 +24,14 @@ public class ClientRestController {
     @GET
     @Path("/filter")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Client> getDevices(@QueryParam("firstName") String firstName,
+    public List<Client> getClients(@QueryParam("firstName") String firstName,
                                    @QueryParam("lastName") String lastName,
                                    @QueryParam("patronymic") String patronymic,
                                    @QueryParam("birthDateFrom") String birthDateFromStr,
                                    @QueryParam("birthDateTo") String birthDateToStr,
-                                   @QueryParam("sortBy") String sortBy) {
+                                   @QueryParam("sortBy") String sortBy,
+                                   @DefaultValue("50") @QueryParam("count") int count,
+                                   @DefaultValue("0") @QueryParam("pageNumber") int pageNumber) {
 
         LocalDate birthDateFrom = ParsingUtil.getLocalDate(birthDateFromStr);;
         LocalDate birthDateTo = ParsingUtil.getLocalDate(birthDateToStr);
@@ -42,7 +43,9 @@ public class ClientRestController {
                 .withPatronymic(patronymic)
                 .withBirthDateFrom(birthDateFrom)
                 .withBirthDateTo(birthDateTo)
-                .withSortParams(sortConditionals);
+                .withSortParams(sortConditionals)
+                .withCount(count)
+                .withPageNumber(pageNumber);
 
         return clientDataService.getClients(filter);
 
@@ -50,17 +53,15 @@ public class ClientRestController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Client> getDevices() {
+    public List<Client> getClients() {
         return clientDataService.getClients();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Client createDevice(Client client) {
-        UUID clientId = clientDataService.saveClient(client);
-        client.setId(clientId);
-        return client;
+    public Client createClient(Client client) {
+        return clientDataService.saveClient(client);
     }
 
     @GET

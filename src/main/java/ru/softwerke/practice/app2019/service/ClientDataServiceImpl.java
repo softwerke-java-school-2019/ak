@@ -1,13 +1,10 @@
 package ru.softwerke.practice.app2019.service;
 
 import ru.softwerke.practice.app2019.model.Client;
-import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 import ru.softwerke.practice.app2019.storage.Storage;
-import ru.softwerke.practice.app2019.storage.filter.ComparisonConditional;
-import ru.softwerke.practice.app2019.storage.filter.FilterCondition;
+import ru.softwerke.practice.app2019.storage.filter.FilterConditional;
 import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,8 +16,11 @@ public class ClientDataServiceImpl implements ClientDataService {
     }
 
     @Override
-    public UUID saveClient(Client client) {
-        return storage.save(client);
+    public Client saveClient(Client client) {
+        UUID id = UUID.randomUUID();
+        client.setId(id);
+        storage.save(client);
+        return client;
     }
 
     @Override
@@ -33,21 +33,22 @@ public class ClientDataServiceImpl implements ClientDataService {
         StorageFilter<Client> storageFilter = new StorageFilter<>();
 
         if (filter.getFirstName() != null) {
-            storageFilter.addCondition(FilterCondition.on(Client::getFirstName).eq(filter.getFirstName()));
+            storageFilter.addCondition(FilterConditional.on(Client::getFirstName).eq(filter.getFirstName()));
         }
 
         if (filter.getLastName() != null) {
-            storageFilter.addCondition(FilterCondition.on(Client::getLastName).eq(filter.getLastName()));
+            storageFilter.addCondition(FilterConditional.on(Client::getLastName).eq(filter.getLastName()));
         }
 
         if (filter.getPatronymic() != null) {
-            storageFilter.addCondition(FilterCondition.on(Client::getPatronymic).eq(filter.getPatronymic()));
+            storageFilter.addCondition(FilterConditional.on(Client::getPatronymic).eq(filter.getPatronymic()));
         }
 
-        storageFilter.addCondition(FilterCondition.on(Client::getBirthDate).inRange(filter.getBirthDateFrom(), filter.getBirthDateTo()));
+        storageFilter.addCondition(FilterConditional.on(Client::getBirthDate).inRange(filter.getBirthDateFrom(), filter.getBirthDateTo()));
 
         storageFilter.addAllSorting(Client.FIELD_PROVIDER, filter.getSortConditionals());
-
+        storageFilter.setCount(filter.getCount());
+        storageFilter.setPageNumber(filter.getPageNumber());
         return storage.get(storageFilter);
     }
 

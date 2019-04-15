@@ -4,16 +4,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-public class FilterCondition<T, R> implements Conditional<T> {
+public class FilterConditional<T, R> implements Conditional<T> {
     private final Function<T, R> extractor;
     private final List<Conditional<R>> conditional;
 
-    private FilterCondition(Function<T, R> extractor, List<Conditional<R>> conditional) {
+    private FilterConditional(Function<T, R> extractor, List<Conditional<R>> conditional) {
         this.extractor = extractor;
         this.conditional = conditional;
     }
 
-    private FilterCondition(Function<T, R> extractor, Conditional<R> conditional) {
+    private FilterConditional(Function<T, R> extractor, Conditional<R> conditional) {
         this(extractor, Collections.singletonList(conditional));
     }
 
@@ -42,19 +42,19 @@ public class FilterCondition<T, R> implements Conditional<T> {
             this.extractor = extractor;
         }
 
-        public FilterCondition<T, R> cond(Conditional<R> conditional) {
-            return new FilterCondition<>(extractor, conditional);
+        public FilterConditional<T, R> cond(Conditional<R> conditional) {
+            return new FilterConditional<>(extractor, conditional);
         }
 
-        public FilterCondition<T, R> conds(List<Conditional<R>> conditionals) {
-            return new FilterCondition<>(extractor, conditionals);
+        public FilterConditional<T, R> conds(List<Conditional<R>> conditionals) {
+            return new FilterConditional<>(extractor, conditionals);
         }
 
-        public FilterCondition<T, R> eq(R value) {
+        public FilterConditional<T, R> eq(R value) {
             return cond(ComparisonConditional.eq(value));
         }
 
-        public FilterCondition<T, R> inRange(R from, R to) {
+        public FilterConditional<T, R> inRange(R from, R to) {
             return cond(new RangeConditional<>(from, to));
         }
     }

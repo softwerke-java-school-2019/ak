@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ru.softwerke.practice.app2019.model.date.DateDeserializer;
+import ru.softwerke.practice.app2019.model.date.DateSerializer;
 import ru.softwerke.practice.app2019.storage.Unique;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortableFieldProvider;
@@ -38,7 +40,7 @@ public class Device implements Unique {
     private final Color color;
 
     @JsonProperty(DATE_FIELD)
-    @JsonSerialize(using = DateSeriailizer.class)
+    @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializer.class)
     private final LocalDate date;
 
@@ -47,11 +49,11 @@ public class Device implements Unique {
 
     @JsonCreator
     public Device(
-            @NotNull @JsonProperty(PRICE_FIELD) BigDecimal price,
-            @NotNull @JsonProperty(MODEL_FIELD) String model,
-            @NotNull @JsonProperty(COLOR_FIELD) Color color,
-            @NotNull @JsonProperty(DATE_FIELD) LocalDate date,
-            @NotNull @JsonProperty(MANUFACTURER_FIELD) String manufacturer) {
+            @NotNull @JsonProperty(value = PRICE_FIELD, required = true) BigDecimal price,
+            @NotNull @JsonProperty(value = MODEL_FIELD, required = true) String model,
+            @NotNull @JsonProperty(value = COLOR_FIELD, required = true) Color color,
+            @NotNull @JsonProperty(value = DATE_FIELD, required = true) LocalDate date,
+            @NotNull @JsonProperty(value = MANUFACTURER_FIELD, required = true) String manufacturer) {
         this.price = price;
         this.model = model;
         this.color = color;

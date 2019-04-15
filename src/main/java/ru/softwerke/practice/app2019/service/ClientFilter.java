@@ -17,6 +17,8 @@ public class ClientFilter {
     private LocalDate birthDateFrom;
     private LocalDate birthDateTo;
     private List<SortConditional> sortConditionals = new ArrayList<>();
+    private int count;
+    private int pageNumber ;
 
     public UUID getId() {
         return id;
@@ -36,9 +38,12 @@ public class ClientFilter {
 
     public List<SortConditional> getSortConditionals() { return sortConditionals; }
 
-    public ClientFilter withId(UUID id) {
-        this.id = id;
-        return this;
+    public int getCount() {
+        return count;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
     }
 
     public  ClientFilter withFirstName(String firstName){
@@ -71,4 +76,13 @@ public class ClientFilter {
         return this;
     }
 
+    public ClientFilter withCount(int count){
+        this.count = count;
+        return this;
+    }
+
+    public ClientFilter withPageNumber(int pageNumber){
+        this.pageNumber = pageNumber;
+        return this;
+    }
 }

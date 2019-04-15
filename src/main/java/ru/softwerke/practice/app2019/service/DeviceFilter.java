@@ -21,6 +21,8 @@ public class DeviceFilter {
     private LocalDate dateTo;
     private String manufacturer;
     private List<SortConditional> sortConditionals = new ArrayList<>();
+    private int count;
+    private int pageNumber;
 
     public UUID getId() {
         return id;
@@ -54,10 +56,9 @@ public class DeviceFilter {
 
     public List<SortConditional> getSortConditionals() { return sortConditionals; }
 
-    public DeviceFilter withId(UUID id) {
-        this.id = id;
-        return this;
-    }
+    public int getCount() { return count; }
+
+    public int getPageNumber() { return pageNumber; }
 
     public DeviceFilter withPriceFrom(BigDecimal priceFrom) {
         this.priceFrom = priceFrom;
@@ -96,6 +97,16 @@ public class DeviceFilter {
 
     public DeviceFilter withSortConditionals(List<SortConditional> sortConditionals){
         this.sortConditionals = sortConditionals;
+        return this;
+    }
+
+    public DeviceFilter withCount(int count){
+        this.count = count;
+        return this;
+    }
+
+    public DeviceFilter withPageNumber(int pageNumber){
+        this.pageNumber = pageNumber;
         return this;
     }
 }

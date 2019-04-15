@@ -10,6 +10,8 @@ import java.util.List;
 public class StorageFilter<T> {
     private List<Conditional<T>> conditions = new ArrayList<>();
     private List<Comparator<T>> sortings = new ArrayList<>();
+    private int count;
+    private int pageNumber;
 
     public List<Conditional<T>> getConditions() {
         return conditions;
@@ -26,7 +28,6 @@ public class StorageFilter<T> {
     public void addSorting(SortableFieldProvider<T> provider, SortConditional conditional) {
         Comparator<T> sorting = provider.getSortConditional(conditional);
         if (conditional.getOrder() == SortConditional.Order.DESC) {
-
             sorting = sorting.reversed();
         }
         sortings.add(sorting);
@@ -34,5 +35,21 @@ public class StorageFilter<T> {
 
     public void addAllSorting(SortableFieldProvider<T> provider, List<SortConditional> conditionals) {
         conditionals.forEach((o) -> addSorting(provider, o));
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
     }
 }

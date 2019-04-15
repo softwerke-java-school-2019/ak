@@ -3,10 +3,7 @@ package ru.softwerke.practice.app2019;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import ru.softwerke.practice.app2019.service.ClientDataService;
-import ru.softwerke.practice.app2019.service.ClientDataServiceImpl;
-import ru.softwerke.practice.app2019.service.DeviceDataService;
-import ru.softwerke.practice.app2019.service.DeviceDataServiceImpl;
+import ru.softwerke.practice.app2019.service.*;
 import ru.softwerke.practice.app2019.storage.RuntimeStorage;
 import ru.softwerke.practice.app2019.storage.Storage;
 
@@ -24,12 +21,14 @@ public class ShopApplication extends ResourceConfig {
                 bind(storageDevice).to(Storage.class);
                 Storage storageClient = new RuntimeStorage();
                 bind(storageClient).to(Storage.class);
+                Storage storageBill = new RuntimeStorage();
+                bind(storageBill).to(Storage.class);
                 bind(deviceDataService(storageDevice)).to(DeviceDataService.class);
                 bind(clientDataService(storageClient)).to(ClientDataService.class);
+                bind(billDataService(storageBill)).to(BillDataService.class);
             }
         });
 
-        //register(MultiPartFeature.class);
     }
 
     private DeviceDataService deviceDataService(Storage storage) {
@@ -37,4 +36,6 @@ public class ShopApplication extends ResourceConfig {
     }
 
     private ClientDataService clientDataService(Storage storage) { return new ClientDataServiceImpl(storage); }
+
+    private BillDataService billDataService(Storage storage) { return new BillDataServiceImpl(storage); }
 }

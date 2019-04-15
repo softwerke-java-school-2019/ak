@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ClientDataService {
-    UUID saveClient(Client client);
+    Client saveClient(Client client);
 
     Client getClientById(UUID id);
 

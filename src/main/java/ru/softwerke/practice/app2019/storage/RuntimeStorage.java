@@ -14,10 +14,8 @@ public class RuntimeStorage<T extends Unique> implements Storage<T> {
     private List<T> objects = new CopyOnWriteArrayList<>();
 
     @Override
-    public UUID save(T device) {
-        UUID objectId = UUID.randomUUID();
-        objects.add(device);
-        return objectId;
+    public void save(T object) {
+        objects.add(object);
     }
 
     @Override
@@ -34,11 +32,16 @@ public class RuntimeStorage<T extends Unique> implements Storage<T> {
             objectStream = objectStream.sorted(sort);
         }
 
+        int count = filter.getCount();
+        int pageNumber = filter.getPageNumber();
+        if (count > 0) {
+            objectStream = objectStream.skip(pageNumber * count).limit(count);
+        }
         return objectStream.collect(Collectors.toList());
     }
 
     @Override
     public T get(UUID id) {
-        return objects.stream().filter(device -> device.getId().equals(id)).findFirst().orElse(null);
+        return objects.stream().filter(object -> object.getId().equals(id)).findFirst().orElse(null);
     }
 }
