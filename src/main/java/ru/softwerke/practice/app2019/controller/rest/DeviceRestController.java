@@ -9,6 +9,7 @@ import ru.softwerke.practice.app2019.service.DeviceFilter;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.math.BigDecimal;
@@ -70,23 +71,18 @@ public class DeviceRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Device createDevice(Device device){
-        try {
-            ModelUtil.checkDevice(device);
-            return deviceDataService.saveDevice(device);
-        }catch (NullPointerException e){
-            throw new NullPointerException("json absents");
-        }
+        QueryValidator.checkEmptyRequest(device);
+        ModelValidator.validateEntity(device);
+        return deviceDataService.saveDevice(device);
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Device getDevice(@PathParam("id") UUID id) {
-        try {
-            return deviceDataService.getDeviceById(id);
-        }catch(NullPointerException e) {
-            throw new NullPointerException("no device found with id = " + id);
-        }
+        Device device = deviceDataService.getDeviceById(id);
+        QueryValidator.checkIfNotFound(device, String.format("Device with id %s doesn't exist", id));
+        return device;
     }
 }
 

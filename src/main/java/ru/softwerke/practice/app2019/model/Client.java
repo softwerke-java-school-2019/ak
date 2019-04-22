@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.validator.constraints.Length;
 import ru.softwerke.practice.app2019.model.date.DateDeserializer;
 import ru.softwerke.practice.app2019.model.date.DateSerializer;
 import ru.softwerke.practice.app2019.storage.Unique;
@@ -12,6 +13,7 @@ import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortableFieldProvider;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Objects;
@@ -31,25 +33,35 @@ public class Client implements Unique {
     private UUID id;
 
     @JsonProperty(FIRST_NAME_FIELD)
+    @NotNull(message = "First name may not be null")
+    @Pattern(regexp = "[A-ZА-Я][a-zа-я]*", message = "Invalid first name")
+    @Length(min = 1, max = 100,  message = "Invalid first name: length must be between 1 and 100")
     private final String firstName;
 
     @JsonProperty(LAST_NAME_FIELD)
+    @NotNull(message = "Last name may not be null")
+    @Pattern(regexp = "[A-ZА-Я][a-zа-я]*", message = "Invalid last name")
+    @Length(min = 1, max = 100,  message = "Invalid last name: length must be between 1 and 100")
     private final String lastName;
 
     @JsonProperty(PATRONYMIC_FIELD)
+    @NotNull(message = "Patronymic may not be null")
+    @Pattern(regexp = "[A-ZА-Я][a-zа-я]*", message = "Invalid patronymic")
+    @Length(min = 1, max = 100, message = "Invalid patronymic: length must be between 1 and 100")
     private final String patronymic;
 
     @JsonProperty(BIRTH_DATE_FIELD)
+    @NotNull(message = "Birth date may not be null")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializer.class)
     private final LocalDate birthDate;
 
     @JsonCreator
     public Client(
-            @NotNull @JsonProperty(value = FIRST_NAME_FIELD, required = true) String firstName,
-            @NotNull @JsonProperty(value = LAST_NAME_FIELD, required = true) String lastName,
-            @NotNull @JsonProperty(value = PATRONYMIC_FIELD, required = true) String patronymic,
-            @NotNull @JsonProperty(value = BIRTH_DATE_FIELD, required = true) LocalDate birthDate) {
+            @JsonProperty(value = FIRST_NAME_FIELD, required = true) String firstName,
+            @JsonProperty(value = LAST_NAME_FIELD, required = true) String lastName,
+            @JsonProperty(value = PATRONYMIC_FIELD, required = true) String patronymic,
+            @JsonProperty(value = BIRTH_DATE_FIELD, required = true) LocalDate birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;

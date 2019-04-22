@@ -6,6 +6,7 @@ import ru.softwerke.practice.app2019.service.ClientFilter;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
@@ -33,7 +34,7 @@ public class ClientRestController {
                                    @DefaultValue("50") @QueryParam("count") int count,
                                    @DefaultValue("0") @QueryParam("pageNumber") int pageNumber) {
 
-        LocalDate birthDateFrom = ParsingUtil.getLocalDate(birthDateFromStr);;
+        LocalDate birthDateFrom = ParsingUtil.getLocalDate(birthDateFromStr);
         LocalDate birthDateTo = ParsingUtil.getLocalDate(birthDateToStr);
         List<SortConditional> sortConditionals = ParsingUtil.getSortParams(sortBy);
 
@@ -61,18 +62,17 @@ public class ClientRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Client createClient(Client client) {
-        try {
-            ModelUtil.checkClient(client);
-            return clientDataService.saveClient(client);
-        }catch (NullPointerException e){
-            throw new NullPointerException("json absents");
-        }
+        QueryValidator.checkEmptyRequest(client);
+        ModelValidator.validateEntity(client);
+        return clientDataService.saveClient(client);
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Client getClient(@PathParam("id") UUID id) {
-        return clientDataService.getClientById(id);
+        Client client = clientDataService.getClientById(id);
+        QueryValidator.checkIfNotFound(client, String.format("Client with id %s doesn't exist", id));
+        return client;
     }
 }

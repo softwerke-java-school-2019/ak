@@ -6,12 +6,24 @@ import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Utility class with some parsing methods
+ */
+
 public class ParsingUtil {
+
+    /**
+     * Parse LocalDate from String
+     * @param dateStr String to be parsed
+     * @return LocalDate date
+     * @throws DateTimeParseException if the text cannot be parsed
+     */
     public static LocalDate getLocalDate(String dateStr){
         LocalDate date = null;
         if (dateStr != null) {
@@ -20,6 +32,12 @@ public class ParsingUtil {
         return date;
     }
 
+    /**
+     * Parses LocalDateTime from String
+     * @param dateTimeStr string to be parsed
+     * @return LocalDateTime date
+     * @throws DateTimeParseException if the text cannot be parsed
+     */
     public static LocalDateTime getLocalDateTime(String dateTimeStr){
         LocalDateTime dateTime = null;
         if (dateTimeStr != null) {
@@ -28,6 +46,11 @@ public class ParsingUtil {
         return dateTime;
     }
 
+    /**
+     * Parses sorting params split by "," from String
+     * @param sortBy string to be parsed
+     * @return List of sort conditionals
+     */
     public static List<SortConditional> getSortParams(String sortBy){
         if (sortBy == null) {
             return Collections.emptyList();
@@ -50,6 +73,11 @@ public class ParsingUtil {
         return sortConditionals;
     }
 
+    /**
+     * Parses devices' ids split by "," from string
+     * @param deviceIdsStr string to be parsed
+     * @return List of ids
+     */
     public static List<UUID> getDeviceIds(String deviceIdsStr){
         if (deviceIdsStr == null){
             return Collections.emptyList();

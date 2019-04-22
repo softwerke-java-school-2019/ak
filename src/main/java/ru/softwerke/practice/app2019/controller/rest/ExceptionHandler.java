@@ -1,7 +1,5 @@
 package ru.softwerke.practice.app2019.controller.rest;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -10,6 +8,10 @@ import javax.ws.rs.ext.Provider;
 public class ExceptionHandler implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception exception) {
-        return Response.status(Response.Status.BAD_REQUEST).entity("invalid json: " + exception.getMessage()).build();
+
+        return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity(JSONErrorMessage.create("invalid request", exception.getMessage()))
+                .build();
     }
 }

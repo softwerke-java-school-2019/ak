@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.validator.constraints.NotEmpty;
 import ru.softwerke.practice.app2019.model.date.DateTimeDeserializer;
 import ru.softwerke.practice.app2019.model.date.DateTimeSerializer;
 import ru.softwerke.practice.app2019.storage.Unique;
@@ -22,7 +23,7 @@ public class Bill implements Unique {
     private static final String ID_FIELD = "id";
     private static final String CLIENT_ID_FIELD = "clientId";
     private static final String ITEMS_LIST_FIELD = "items";
-    private static final String DATE_TIME_FIELD = "dateTime";
+    private static final String DATE_TIME_FIELD = "purchaseDate";
     private static final String TOTAL_PRICE_FIELD = "totalPrice";
 
     public static final SortableFieldProvider<Bill> FIELD_PROVIDER = new BillSortableFieldProvider();
@@ -31,12 +32,16 @@ public class Bill implements Unique {
     private UUID id;
 
     @JsonProperty(CLIENT_ID_FIELD)
+    @NotNull(message = "Client's id may not be null")
     private final UUID clientId;
 
     @JsonProperty(ITEMS_LIST_FIELD)
+    @NotNull(message = "Bill items may not be null")
+    @NotEmpty(message = "List of bill items may not be empty")
     private final List<BillItem> billItems;
 
     @JsonProperty(DATE_TIME_FIELD)
+    @NotNull(message = "Purchase date may not be null")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private final LocalDateTime dateTime;
@@ -46,9 +51,10 @@ public class Bill implements Unique {
 
     @JsonCreator
     public Bill(
-            @NotNull @JsonProperty(value = CLIENT_ID_FIELD, required = true) UUID clientId,
-            @NotNull @JsonProperty(value = ITEMS_LIST_FIELD, required = true) List<BillItem> billItems,
-            @NotNull @JsonProperty(value = DATE_TIME_FIELD, required = true) LocalDateTime dateTime) {
+            @JsonProperty(value = CLIENT_ID_FIELD, required = true)
+                    UUID clientId,
+            @JsonProperty(value = ITEMS_LIST_FIELD, required = true) List<BillItem> billItems,
+            @JsonProperty(value = DATE_TIME_FIELD, required = true) LocalDateTime dateTime) {
         this.clientId = clientId;
         this.billItems = billItems;
         this.totalPrice = this.billItems.stream().map(BillItem::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);

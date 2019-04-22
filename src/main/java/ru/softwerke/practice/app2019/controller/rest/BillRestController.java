@@ -2,8 +2,12 @@ package ru.softwerke.practice.app2019.controller.rest;
 
 import ru.softwerke.practice.app2019.model.Bill;
 import ru.softwerke.practice.app2019.model.BillItem;
+import ru.softwerke.practice.app2019.model.Client;
+import ru.softwerke.practice.app2019.model.Device;
 import ru.softwerke.practice.app2019.service.BillDataService;
 import ru.softwerke.practice.app2019.service.BillFilter;
+import ru.softwerke.practice.app2019.service.ClientDataService;
+import ru.softwerke.practice.app2019.service.DeviceDataService;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import javax.inject.Inject;
@@ -17,10 +21,14 @@ import java.util.UUID;
 @Path("bill")
 public class BillRestController {
     private BillDataService billDataService;
+    private ClientDataService clientDataService;
+    private DeviceDataService deviceDataService;
 
     @Inject
-    public BillRestController(BillDataService billDataService) {
+    public BillRestController(BillDataService billDataService, ClientDataService clientDataService, DeviceDataService deviceDataService) {
         this.billDataService = billDataService;
+        this.clientDataService = clientDataService;
+        this.deviceDataService = deviceDataService;
     }
 
     @GET
@@ -64,18 +72,25 @@ public class BillRestController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Bill createBill(Bill bill) {
-        try {
-            return billDataService.saveBill(bill);
-        }catch (NullPointerException e){
-            throw new NullPointerException("json absents");
+        QueryValidator.checkEmptyRequest(bill);
+        ModelValidator.validateEntity(bill);
+        Client client = clientDataService.getClientById(bill.getClientId());
+        QueryValidator.checkIfNotFound(client, String.format("Client with id %s doesn't exist", bill.getClientId()));
+        for (BillItem billItem : bill.getBillItems()){
+            ModelValidator.validateEntity(billItem);
+            Device device = deviceDataService.getDeviceById(billItem.getDeviceId());
+            QueryValidator.checkIfNotFound(device, String.format("Device with id %s doesn't exist", billItem.getDeviceId()));
         }
+        return billDataService.saveBill(bill);
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Bill getBill(@PathParam("id") UUID id) {
-        return billDataService.getBillById(id);
+        Bill bill = billDataService.getBillById(id);
+        QueryValidator.checkIfNotFound(bill, String.format("Bill with id %s doesn't exist", id));
+        return bill;
     }
 
 }

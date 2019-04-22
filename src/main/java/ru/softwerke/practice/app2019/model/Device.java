@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.validator.constraints.Length;
 import ru.softwerke.practice.app2019.model.date.DateDeserializer;
 import ru.softwerke.practice.app2019.model.date.DateSerializer;
 import ru.softwerke.practice.app2019.storage.Unique;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortableFieldProvider;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,29 +33,37 @@ public class Device implements Unique {
     private UUID id;
 
     @JsonProperty(PRICE_FIELD)
+    @NotNull(message = "Price may not be null")
+    @Digits(integer=6, fraction=2)
     private final BigDecimal price;
 
     @JsonProperty(MODEL_FIELD)
+    @NotNull(message = "Model may not be null")
+    @Length(min = 1, max = 100,  message = "Invalid model: length must be between 1 and 100")
     private final String model;
 
     @JsonProperty(COLOR_FIELD)
+    @NotNull(message = "Color may not be null")
     private final Color color;
 
     @JsonProperty(DATE_FIELD)
+    @NotNull(message = "Date may not be null")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializer.class)
     private final LocalDate date;
 
     @JsonProperty(MANUFACTURER_FIELD)
+    @NotNull(message = "Manufacturer may not be null")
+    @Length(min = 1, max = 100,  message = "Invalid manufacturer: length must be between 1 and 100")
     private final String manufacturer;
 
     @JsonCreator
     public Device(
-            @NotNull @JsonProperty(value = PRICE_FIELD, required = true) BigDecimal price,
-            @NotNull @JsonProperty(value = MODEL_FIELD, required = true) String model,
-            @NotNull @JsonProperty(value = COLOR_FIELD, required = true) Color color,
-            @NotNull @JsonProperty(value = DATE_FIELD, required = true) LocalDate date,
-            @NotNull @JsonProperty(value = MANUFACTURER_FIELD, required = true) String manufacturer) {
+            @JsonProperty(value = PRICE_FIELD, required = true) BigDecimal price,
+            @JsonProperty(value = MODEL_FIELD, required = true) String model,
+            @JsonProperty(value = COLOR_FIELD, required = true) Color color,
+            @JsonProperty(value = DATE_FIELD, required = true) LocalDate date,
+            @JsonProperty(value = MANUFACTURER_FIELD, required = true) String manufacturer) {
         this.price = price;
         this.model = model;
         this.color = color;
