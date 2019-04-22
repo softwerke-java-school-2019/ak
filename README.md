@@ -34,3 +34,21 @@ Query Params for client: firstName, lastName, patronymic, birthDateFrom, birthDa
 Example:
 Get /shop-api/client/filter?lastName=Petrov
 
+### Bill
+Post /shop-api/bill
+{  
+	"clientId" : "ef4ad9ff-ed7a-409b-9ee8-bfd4219198bb",  
+	"dateTime" : "01.01.2019 07:50:22",  
+	"items" : [{  
+		"deviceId" : "798a7bc9-323c-4cd4-9184-b472a28b50bd",  
+		"quantity" : "2",  
+		"price" : "2200"  
+	},  
+	{  
+		"deviceId" : "f7623e4e-5889-49c3-9af4-bd38553fef3a",  
+		"quantity" : "2",  
+		"price" : "2100"	
+	}]  
+}  
+
+Get /shop-api/bill/{id}
