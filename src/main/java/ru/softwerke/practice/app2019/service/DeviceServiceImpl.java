@@ -41,7 +41,7 @@ public class DeviceServiceImpl implements DeviceService {
         }
 
         if (filter.getColorName() != null) {
-            storageFilter.addCondition(FilterConditional.on(Device::getColorName).eq(filter.getColorName()));
+            storageFilter.addCondition(FilterConditional.on(Device::getColorName).eq(filter.getColorName().toLowerCase()));
         }
 
         if (filter.getColorRGB() != null) {

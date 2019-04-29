@@ -2,6 +2,9 @@ package ru.softwerke.practice.app2019.controller.rest;
 
 import org.junit.jupiter.api.Test;
 import ru.softwerke.practice.app2019.model.Client;
+import ru.softwerke.practice.app2019.utils.ModelValidator;
+import ru.softwerke.practice.app2019.utils.ParsingUtil;
+
 import javax.ws.rs.WebApplicationException;
 import java.time.LocalDate;
 

@@ -1,6 +1,5 @@
 package ru.softwerke.practice.app2019.controller.rest;
 
-import ru.softwerke.practice.app2019.model.Color;
 import ru.softwerke.practice.app2019.model.Device;
 import ru.softwerke.practice.app2019.model.DeviceType;
 import ru.softwerke.practice.app2019.service.ColorService;
@@ -8,10 +7,11 @@ import ru.softwerke.practice.app2019.service.DeviceService;
 import ru.softwerke.practice.app2019.service.DeviceFilter;
 import ru.softwerke.practice.app2019.service.preprocessing.ColorDevicePreprocessor;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
+import ru.softwerke.practice.app2019.utils.ModelValidator;
+import ru.softwerke.practice.app2019.utils.ParsingUtil;
+import ru.softwerke.practice.app2019.utils.QueryValidator;
 
 import javax.inject.Inject;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.math.BigDecimal;

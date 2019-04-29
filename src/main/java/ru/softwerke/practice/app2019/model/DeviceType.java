@@ -23,6 +23,9 @@ public enum DeviceType {
 
     @JsonCreator
     public static DeviceType forValue(String value){
+        if (value == null) {
+            return null;
+        }
         return namesMap.get(value.toLowerCase());
     }
 

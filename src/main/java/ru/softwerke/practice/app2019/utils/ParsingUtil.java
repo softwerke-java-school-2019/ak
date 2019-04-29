@@ -1,4 +1,4 @@
-package ru.softwerke.practice.app2019.controller.rest;
+package ru.softwerke.practice.app2019.utils;
 
 import ru.softwerke.practice.app2019.model.date.DateDeserializer;
 import ru.softwerke.practice.app2019.model.date.DateTimeDeserializer;
@@ -10,7 +10,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Utility class with some parsing methods

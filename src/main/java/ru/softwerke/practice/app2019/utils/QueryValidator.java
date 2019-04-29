@@ -1,4 +1,6 @@
-package ru.softwerke.practice.app2019.controller.rest;
+package ru.softwerke.practice.app2019.utils;
+
+import ru.softwerke.practice.app2019.controller.rest.JSONErrorMessage;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -15,7 +17,7 @@ public class QueryValidator {
      * @param o checked object
      * @throws WebApplicationException exception to be returned to client
      */
-    static void checkEmptyRequest(Object o) {
+    public static void checkEmptyRequest(Object o) {
         if (o == null) {
             Response response = Response
                     .status(Response.Status.BAD_REQUEST)
@@ -33,7 +35,7 @@ public class QueryValidator {
      * @param message message that is returned to client with response
      * @throws WebApplicationException exception to be returned to client
      */
-    static void checkIfNotFound(Object o, String message) {
+    public static void checkIfNotFound(Object o, String message) {
         if (o == null) {
             Response response = Response
                     .status(Response.Status.NOT_FOUND)

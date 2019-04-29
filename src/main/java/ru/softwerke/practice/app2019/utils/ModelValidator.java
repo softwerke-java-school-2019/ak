@@ -1,4 +1,6 @@
-package ru.softwerke.practice.app2019.controller.rest;
+package ru.softwerke.practice.app2019.utils;
+
+import ru.softwerke.practice.app2019.controller.rest.JSONErrorMessage;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

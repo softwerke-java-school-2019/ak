@@ -4,6 +4,9 @@ import ru.softwerke.practice.app2019.model.Client;
 import ru.softwerke.practice.app2019.service.ClientService;
 import ru.softwerke.practice.app2019.service.ClientFilter;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
+import ru.softwerke.practice.app2019.utils.ModelValidator;
+import ru.softwerke.practice.app2019.utils.ParsingUtil;
+import ru.softwerke.practice.app2019.utils.QueryValidator;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
