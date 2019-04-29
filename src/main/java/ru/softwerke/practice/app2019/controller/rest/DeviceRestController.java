@@ -1,70 +1,75 @@
 package ru.softwerke.practice.app2019.controller.rest;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import ru.softwerke.practice.app2019.model.Color;
 import ru.softwerke.practice.app2019.model.Device;
-import ru.softwerke.practice.app2019.service.DeviceDataService;
+import ru.softwerke.practice.app2019.model.DeviceType;
+import ru.softwerke.practice.app2019.service.ColorService;
+import ru.softwerke.practice.app2019.service.DeviceService;
 import ru.softwerke.practice.app2019.service.DeviceFilter;
+import ru.softwerke.practice.app2019.service.preprocessing.ColorDevicePreprocessor;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Path("device")
 public class DeviceRestController {
-    private DeviceDataService deviceDataService;
+    private DeviceService deviceService;
+    private ColorService colorService;
 
     @Inject
-    public DeviceRestController(DeviceDataService deviceDataService) {
-        this.deviceDataService = deviceDataService;
+    public DeviceRestController(DeviceService deviceService, ColorService colorService) {
+        this.deviceService = deviceService;
+        this.colorService = colorService;
     }
 
 
     @GET
-    @Path("/filter")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Device> getDevices(@QueryParam("color") Color color,
+    public List<Device> getDevices(@QueryParam("deviceType") String deviceTypeStr,
+                                   @QueryParam("colorName") String colorName,
+                                   @QueryParam("colorRGB") Integer colorRGB,
+                                   @QueryParam("price") BigDecimal price,
                                    @QueryParam("priceFrom") BigDecimal priceFrom,
                                    @QueryParam("priceTo") BigDecimal priceTo,
-                                   @QueryParam("dateFrom") String dateFromStr,
-                                   @QueryParam("dateTo") String dateToStr,
-                                   @QueryParam("model") String model,
+                                   @QueryParam("manufactureDate") String dateStr,
+                                   @QueryParam("manufactureDateFrom") String dateFromStr,
+                                   @QueryParam("manufactureDateTo") String dateToStr,
+                                   @QueryParam("modelName") String model,
                                    @QueryParam("manufacturer") String manufacturer,
                                    @QueryParam("sortBy") String sortBy,
-                                   @DefaultValue("50") @QueryParam("count") int count,
-                                   @DefaultValue("0") @QueryParam("pageNumber") int pageNumber) {
+                                   @DefaultValue("10") @QueryParam("pageItems")int count,
+                                   @DefaultValue("1") @QueryParam("page") int pageNumber) {
 
         LocalDate dateFrom = ParsingUtil.getLocalDate(dateFromStr);
         LocalDate dateTo = ParsingUtil.getLocalDate(dateToStr);
+        LocalDate date = ParsingUtil.getLocalDate(dateStr);
         List<SortConditional> sortConditionals = ParsingUtil.getSortParams(sortBy);
 
         DeviceFilter filter = new DeviceFilter()
+                .withDeviceType(DeviceType.forValue(deviceTypeStr))
+                .withColorName(colorName)
+                .withColorRGB(colorRGB)
+                .withPrice(price)
                 .withPriceFrom(priceFrom)
                 .withPriceTo(priceTo)
-                .withColor(color)
+                .withDate(date)
                 .withDateFrom(dateFrom)
                 .withDateTo(dateTo)
                 .withModel(model)
                 .withManufacturer(manufacturer)
                 .withSortConditionals(sortConditionals)
                 .withCount(count)
-                .withPageNumber(pageNumber);
+                .withPageNumber(pageNumber-1);
+        ModelValidator.validateEntity(filter);
+        return deviceService.getDevices(filter);
 
-        return deviceDataService.getDevices(filter);
-
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Device> getDevices() {
-        return deviceDataService.getDevices();
     }
 
     @POST
@@ -73,14 +78,16 @@ public class DeviceRestController {
     public Device createDevice(Device device){
         QueryValidator.checkEmptyRequest(device);
         ModelValidator.validateEntity(device);
-        return deviceDataService.saveDevice(device);
+        ColorDevicePreprocessor colorDevicePreprocessor = new ColorDevicePreprocessor(colorService);
+        device = colorDevicePreprocessor.process(device);
+        return deviceService.saveDevice(device);
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Device getDevice(@PathParam("id") UUID id) {
-        Device device = deviceDataService.getDeviceById(id);
+    public Device getDevice(@PathParam("id") int id) {
+        Device device = deviceService.getDeviceById(id);
         QueryValidator.checkIfNotFound(device, String.format("Device with id %s doesn't exist", id));
         return device;
     }

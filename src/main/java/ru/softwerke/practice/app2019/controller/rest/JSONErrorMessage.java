@@ -7,7 +7,7 @@ public class JSONErrorMessage {
         this.error = error;
     }
 
-    static JSONErrorMessage create(String type, String msg) {
+    public static JSONErrorMessage create(String type, String msg) {
         return new JSONErrorMessage(new ErrorDescription(type, msg));
     }
 

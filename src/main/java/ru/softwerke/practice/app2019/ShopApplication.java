@@ -1,7 +1,6 @@
 package ru.softwerke.practice.app2019;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import ru.softwerke.practice.app2019.service.*;
 import ru.softwerke.practice.app2019.storage.RuntimeStorage;
@@ -23,19 +22,24 @@ public class ShopApplication extends ResourceConfig {
                 bind(storageClient).to(Storage.class);
                 Storage storageBill = new RuntimeStorage();
                 bind(storageBill).to(Storage.class);
-                bind(deviceDataService(storageDevice)).to(DeviceDataService.class);
-                bind(clientDataService(storageClient)).to(ClientDataService.class);
-                bind(billDataService(storageBill)).to(BillDataService.class);
+                Storage storageColor = new RuntimeStorage();
+                bind(storageColor).to(Storage.class);
+                bind(deviceService(storageDevice)).to(DeviceService.class);
+                bind(clientService(storageClient)).to(ClientService.class);
+                bind(billService(storageBill)).to(BillService.class);
+                bind(colorService(storageColor)).to(ColorService.class);
             }
         });
 
     }
 
-    private DeviceDataService deviceDataService(Storage storage) {
-        return new DeviceDataServiceImpl(storage);
+    private DeviceService deviceService(Storage storage) {
+        return new DeviceServiceImpl(storage);
     }
 
-    private ClientDataService clientDataService(Storage storage) { return new ClientDataServiceImpl(storage); }
+    private ClientService clientService(Storage storage) { return new ClientServiceImpl(storage); }
 
-    private BillDataService billDataService(Storage storage) { return new BillDataServiceImpl(storage); }
+    private BillService billService(Storage storage) { return new BillServiceImpl(storage); }
+
+    private ColorService colorService(Storage storage) { return new ColorServiceImpl(storage); }
 }

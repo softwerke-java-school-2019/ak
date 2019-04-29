@@ -5,7 +5,6 @@ import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,7 +40,7 @@ public class RuntimeStorage<T extends Unique> implements Storage<T> {
     }
 
     @Override
-    public T get(UUID id) {
-        return objects.stream().filter(object -> object.getId().equals(id)).findFirst().orElse(null);
+    public T get(int id) {
+        return objects.stream().filter(object -> object.getId() == id).findFirst().orElse(null);
     }
 }

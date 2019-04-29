@@ -17,23 +17,22 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Bill implements Unique {
     private static final String ID_FIELD = "id";
-    private static final String CLIENT_ID_FIELD = "clientId";
+    private static final String CLIENT_ID_FIELD = "customerId";
     private static final String ITEMS_LIST_FIELD = "items";
-    private static final String DATE_TIME_FIELD = "purchaseDate";
+    private static final String DATE_TIME_FIELD = "purchaseDateTime";
     private static final String TOTAL_PRICE_FIELD = "totalPrice";
 
     public static final SortableFieldProvider<Bill> FIELD_PROVIDER = new BillSortableFieldProvider();
 
     @JsonProperty(ID_FIELD)
-    private UUID id;
+    private int id;
 
     @JsonProperty(CLIENT_ID_FIELD)
     @NotNull(message = "Client's id may not be null")
-    private final UUID clientId;
+    private final int clientId;
 
     @JsonProperty(ITEMS_LIST_FIELD)
     @NotNull(message = "Bill items may not be null")
@@ -41,7 +40,7 @@ public class Bill implements Unique {
     private final List<BillItem> billItems;
 
     @JsonProperty(DATE_TIME_FIELD)
-    @NotNull(message = "Purchase date may not be null")
+    @NotNull(message = "Purchase date time may not be null")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private final LocalDateTime dateTime;
@@ -51,13 +50,15 @@ public class Bill implements Unique {
 
     @JsonCreator
     public Bill(
-            @JsonProperty(value = CLIENT_ID_FIELD, required = true)
-                    UUID clientId,
+            @JsonProperty(value = CLIENT_ID_FIELD, required = true) int clientId,
             @JsonProperty(value = ITEMS_LIST_FIELD, required = true) List<BillItem> billItems,
-            @JsonProperty(value = DATE_TIME_FIELD, required = true) LocalDateTime dateTime) {
+            @JsonProperty(value = DATE_TIME_FIELD, required = false) LocalDateTime dateTime) {
         this.clientId = clientId;
         this.billItems = billItems;
         this.totalPrice = this.billItems.stream().map(BillItem::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (dateTime == null) {
+            dateTime = LocalDateTime.now();
+        }
         this.dateTime = dateTime;
     }
 
@@ -67,7 +68,7 @@ public class Bill implements Unique {
         if (!(o instanceof Bill)) return false;
         Bill bill = (Bill) o;
         return id == bill.id &&
-                clientId.equals(bill.clientId) &&
+                clientId == bill.clientId &&
                 billItems.equals(bill.billItems) &&
                 dateTime.equals(bill.dateTime) &&
                 totalPrice.equals(bill.totalPrice);
@@ -90,15 +91,15 @@ public class Bill implements Unique {
     }
 
     @Override
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public UUID getClientId() {
+    public int getClientId() {
         return clientId;
     }
 
@@ -114,8 +115,8 @@ public class Bill implements Unique {
         return totalPrice;
     }
 
-    public boolean containsDevice(UUID id) {
-        return billItems.stream().anyMatch(billItem -> billItem.getDeviceId().equals(id));
+    public boolean containsDevice(int id) {
+        return billItems.stream().anyMatch(billItem -> billItem.getDeviceId() == id);
     }
 
     public static class BillSortableFieldProvider implements SortableFieldProvider<Bill> {

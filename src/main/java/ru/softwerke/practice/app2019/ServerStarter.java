@@ -47,21 +47,12 @@ public class ServerStarter {
         ctx.getMimeTypes().addMimeMapping("js", MimeTypes.Type.APPLICATION_JSON_UTF_8.asString());
         ctx.getMimeTypes().addMimeMapping("css", "text/css;charset=utf-8");
 
-        ServletHolder dynamicServletHolder = ctx.addServlet(ServletContainer.class, "/shop-api/*");
+        ServletHolder dynamicServletHolder = ctx.addServlet(ServletContainer.class, "/api/*");
         dynamicServletHolder.setInitParameter("javax.ws.rs.Application", ShopApplication.class.getCanonicalName());
 
         ServletHolder staticServletHolder = new ServletHolder("default", DefaultServlet.class);
         staticServletHolder.setInitParameter("dirAllowed", "false");
         staticServletHolder.setInitParameter("fileEncoding", "utf-8");
-
-//        staticServletHolder.setInitParameter(
-//                "jersey.config.server.provider.classnames",
-//                DeviceRestController.class.getCanonicalName() + ", " +
-//                        com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider.class.getCanonicalName());
-//
-//
-//        staticServletHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
-//
 
         ctx.addServlet(staticServletHolder, "/");
 

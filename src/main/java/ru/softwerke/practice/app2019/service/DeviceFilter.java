@@ -1,31 +1,39 @@
 package ru.softwerke.practice.app2019.service;
 
-import ru.softwerke.practice.app2019.model.Color;
+import ru.softwerke.practice.app2019.model.DeviceType;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class DeviceFilter {
-    public final static DeviceFilter EMPTY = new DeviceFilter();
 
-    private UUID id;
+    private DeviceType deviceType;
+    private BigDecimal price;
     private BigDecimal priceFrom;
     private BigDecimal priceTo;
     private String model;
-    private Color color;
+    private String colorName;
+    private Integer colorRGB;
     private LocalDate dateFrom;
     private LocalDate dateTo;
+    private LocalDate date;
     private String manufacturer;
     private List<SortConditional> sortConditionals = new ArrayList<>();
+    @Max(value = 1000, message = "Too many page items, max value = 1000")
     private int count;
+    @Min(value = 0, message = "Page min value = 1")
+    @Max(value = 1000000, message = "Page max value = 1000000")
     private int pageNumber;
 
-    public UUID getId() {
-        return id;
+    public DeviceType getDeviceType() { return deviceType; }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public BigDecimal getPriceFrom() {
@@ -40,9 +48,11 @@ public class DeviceFilter {
         return model;
     }
 
-    public Color getColor() {
-        return color;
-    }
+    public String getColorName() { return colorName; }
+
+    public Integer getColorRGB() { return colorRGB; }
+
+    public LocalDate getDate() { return date; }
 
     public LocalDate getDateFrom() {
         return dateFrom;
@@ -60,6 +70,16 @@ public class DeviceFilter {
 
     public int getPageNumber() { return pageNumber; }
 
+    public DeviceFilter withDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+        return this;
+    }
+
+    public DeviceFilter withPrice(BigDecimal price) {
+        this.price = price;
+        return this;
+    }
+
     public DeviceFilter withPriceFrom(BigDecimal priceFrom) {
         this.priceFrom = priceFrom;
         return this;
@@ -75,8 +95,18 @@ public class DeviceFilter {
         return this;
     }
 
-    public DeviceFilter withColor(Color color) {
-        this.color = color;
+    public DeviceFilter withColorName(String colorName) {
+        this.colorName = colorName;
+        return this;
+    }
+
+    public DeviceFilter withColorRGB(Integer colorRGB) {
+        this.colorRGB = colorRGB;
+        return this;
+    }
+
+    public DeviceFilter withDate(LocalDate date) {
+        this.date = date;
         return this;
     }
 

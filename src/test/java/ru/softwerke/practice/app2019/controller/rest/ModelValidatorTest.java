@@ -1,9 +1,12 @@
 package ru.softwerke.practice.app2019.controller.rest;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import ru.softwerke.practice.app2019.model.Client;
 import javax.ws.rs.WebApplicationException;
 import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class ModelValidatorTest {
@@ -13,28 +16,29 @@ public class ModelValidatorTest {
     public void validateGoodClient() {
         LocalDate date = ParsingUtil.getLocalDate("12.12.2018");
         client = new Client("Ng", "Ng", "Ng", date);
-        ModelValidator.validateEntity(client);
+        assertTrue(validate(client));
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test
     public void validateBadClientWithLastNameNull() {
         client = new Client("Ng", null, "Ng", LocalDate.now());
-        ModelValidator.validateEntity(client);
+        assertFalse(validate(client));
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test
     public void validateBadClientWithDateNull() {
         client = new Client("Ng", "N", "Ng", null);
         ModelValidator.validateEntity(client);
+        assertFalse(validate(client));
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test
     public void validateBadClientWithWrongFirstName() {
         client = new Client("g", "N", "Ng", LocalDate.now());
-        ModelValidator.validateEntity(client);
+        assertFalse(validate(client));
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test
     public void validateBadClientWithTooLongFirstName() {
         StringBuffer firatName = new StringBuffer(101);
         firatName.append("A");
@@ -42,15 +46,21 @@ public class ModelValidatorTest {
             firatName.append("b");
         }
         client = new Client(firatName.toString(), "N", "Ng", LocalDate.now());
-        ModelValidator.validateEntity(client);
+        assertFalse(validate(client));
     }
 
-    @Test(expected = WebApplicationException.class)
+    @Test
     public void validateBadClientWithTooShortFirstName() {
         client = new Client("", "N", "Ng", LocalDate.now());
-        ModelValidator.validateEntity(client);
+        assertFalse(validate(client));
     }
 
-
-
+    private static boolean validate(Object object) {
+        try {
+            ModelValidator.validateEntity(object);
+            return true;
+        } catch (WebApplicationException ex) {
+            return false;
+        }
+    }
 }

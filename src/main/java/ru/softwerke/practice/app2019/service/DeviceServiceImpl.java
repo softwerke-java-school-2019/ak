@@ -4,27 +4,27 @@ import ru.softwerke.practice.app2019.model.Device;
 import ru.softwerke.practice.app2019.storage.Storage;
 import ru.softwerke.practice.app2019.storage.filter.FilterConditional;
 import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
+import ru.softwerke.practice.app2019.utils.Identifier;
 
 import java.util.List;
-import java.util.UUID;
 
-public class DeviceDataServiceImpl implements DeviceDataService {
+public class DeviceServiceImpl implements DeviceService {
     private Storage<Device> storage;
 
-    public DeviceDataServiceImpl(Storage<Device> storage) {
+    public DeviceServiceImpl(Storage<Device> storage) {
         this.storage = storage;
     }
 
     @Override
     public Device saveDevice(Device device) {
-        UUID id = UUID.randomUUID();
+        int id = Identifier.nextId();
         device.setId(id);
         storage.save(device);
         return device;
     }
 
     @Override
-    public Device getDeviceById(UUID id) {
+    public Device getDeviceById(int id) {
         return storage.get(id);
     }
 
@@ -40,8 +40,24 @@ public class DeviceDataServiceImpl implements DeviceDataService {
             storageFilter.addCondition(FilterConditional.on(Device::getModel).eq(filter.getModel()));
         }
 
-        if (filter.getColor() != null) {
-            storageFilter.addCondition(FilterConditional.on(Device::getColor).eq(filter.getColor()));
+        if (filter.getColorName() != null) {
+            storageFilter.addCondition(FilterConditional.on(Device::getColorName).eq(filter.getColorName()));
+        }
+
+        if (filter.getColorRGB() != null) {
+            storageFilter.addCondition(FilterConditional.on(Device::getColorRGB).eq(filter.getColorRGB()));
+        }
+
+        if (filter.getDeviceType() != null) {
+            storageFilter.addCondition(FilterConditional.on(Device::getDeviceType).eq(filter.getDeviceType()));
+        }
+
+        if (filter.getDate() != null) {
+            storageFilter.addCondition(FilterConditional.on(Device::getDate).eq(filter.getDate()));
+        }
+
+        if (filter.getPrice() != null) {
+            storageFilter.addCondition(FilterConditional.on(Device::getPrice).eq(filter.getPrice()));
         }
 
         storageFilter.addCondition(FilterConditional.on(Device::getPrice).inRange(filter.getPriceFrom(), filter.getPriceTo()));

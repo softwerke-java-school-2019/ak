@@ -1,35 +1,35 @@
 package ru.softwerke.practice.app2019.service;
 
-import ru.softwerke.practice.app2019.model.Bill;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class BillFilter {
-    public final static BillFilter EMPTY = new BillFilter();
-
-    private UUID id;
-    private UUID clientId;
+    private Integer clientId;
+    private LocalDateTime dateTime;
     private LocalDateTime dateTimeFrom;
     private LocalDateTime dateTimeTo;
+    private BigDecimal totalPrice;
     private BigDecimal totalPriceFrom;
     private BigDecimal totalPriceTo;
-    private List<UUID> deviceIds = new ArrayList<>();
+    private List<Integer> deviceIds = new ArrayList<>();
     private List<SortConditional> sortConditionals = new ArrayList<>();
+    @Max(value = 1000, message = "Too many page items, max value = 1000")
     private int count;
+    @Min(value = 0, message = "Page min value = 1")
+    @Max(value = 1000000, message = "Page max value = 1000000")
     private int pageNumber;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public UUID getClientId() {
+    public Integer  getClientId() {
         return clientId;
     }
+
+    public LocalDateTime getDateTime() { return dateTime; }
 
     public LocalDateTime getDateTimeFrom() {
         return dateTimeFrom;
@@ -39,6 +39,8 @@ public class BillFilter {
         return dateTimeTo;
     }
 
+    public BigDecimal getTotalPrice() { return totalPrice; }
+
     public BigDecimal getTotalPriceFrom() {
         return totalPriceFrom;
     }
@@ -47,7 +49,7 @@ public class BillFilter {
         return totalPriceTo;
     }
 
-    public List<UUID> getDeviceIds() {
+    public List<Integer> getDeviceIds() {
         return deviceIds;
     }
 
@@ -63,8 +65,13 @@ public class BillFilter {
         return pageNumber;
     }
 
-    public BillFilter withClientId(UUID clientId){
+    public BillFilter withClientId(Integer clientId){
         this.clientId = clientId;
+        return this;
+    }
+
+    public BillFilter withDateTime(LocalDateTime dateTime){
+        this.dateTime = dateTime;
         return this;
     }
 
@@ -78,6 +85,11 @@ public class BillFilter {
         return this;
     }
 
+    public BillFilter withTotalPrice(BigDecimal totalPrice){
+        this.totalPrice = totalPrice;
+        return this;
+    }
+
     public BillFilter withTotalPriceFrom(BigDecimal totalPriceFrom){
         this.totalPriceFrom = totalPriceFrom;
         return this;
@@ -88,7 +100,7 @@ public class BillFilter {
         return this;
     }
 
-    public BillFilter withDeviceIds(List<UUID> deviceIds){
+    public BillFilter withDeviceIds(List<Integer> deviceIds){
         this.deviceIds = deviceIds;
         return this;
     }

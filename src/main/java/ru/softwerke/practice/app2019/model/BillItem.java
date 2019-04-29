@@ -8,7 +8,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.UUID;
 
 public class BillItem {
     private static final String DEVICE_ID_FIELD = "deviceId";
@@ -17,7 +16,7 @@ public class BillItem {
 
     @JsonProperty(DEVICE_ID_FIELD)
     @NotNull(message = "Device's id may not be null")
-    private final UUID deviceId;
+    private final int deviceId;
 
     @JsonProperty(QUANTITY_FIELD)
     @Min(1)
@@ -30,7 +29,7 @@ public class BillItem {
 
     @JsonCreator
     public BillItem(
-            @JsonProperty(value = DEVICE_ID_FIELD, required = true) UUID deviceId,
+            @JsonProperty(value = DEVICE_ID_FIELD, required = true) int deviceId,
             @NotNull @JsonProperty(value = QUANTITY_FIELD, required = true) int quantity,
             @NotNull @JsonProperty(value = PRICE_FIELD, required = true) BigDecimal price) {
         this.deviceId = deviceId;
@@ -43,8 +42,8 @@ public class BillItem {
         if (this == o) return true;
         if (!(o instanceof BillItem)) return false;
         BillItem billItem = (BillItem) o;
-        return quantity == billItem.quantity &&
-                deviceId.equals(billItem.deviceId) &&
+        return deviceId == billItem.deviceId &&
+                quantity == billItem.quantity &&
                 price.equals(billItem.price);
     }
 
@@ -62,7 +61,7 @@ public class BillItem {
                 '}';
     }
 
-    public UUID getDeviceId() {
+    public int getDeviceId() {
         return deviceId;
     }
 

@@ -17,20 +17,19 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Client implements Unique {
     private static final String ID_FIELD = "id";
     private static final String FIRST_NAME_FIELD = "firstName";
     private static final String LAST_NAME_FIELD = "lastName";
-    private static final String PATRONYMIC_FIELD = "patronymic";
-    private static final String BIRTH_DATE_FIELD = "birthDate";
+    private static final String PATRONYMIC_FIELD = "middleName";
+    private static final String BIRTH_DATE_FIELD = "birthdate";
 
     public static final SortableFieldProvider<Client> FIELD_PROVIDER = new ClientSortableFieldProvider();
 
 
     @JsonProperty(ID_FIELD)
-    private UUID id;
+    private int id;
 
     @JsonProperty(FIRST_NAME_FIELD)
     @NotNull(message = "First name may not be null")
@@ -68,12 +67,12 @@ public class Client implements Unique {
         this.birthDate = birthDate;
     }
 
-    public void setId(UUID id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     @Override
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 

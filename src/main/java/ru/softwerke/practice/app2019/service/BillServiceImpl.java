@@ -4,27 +4,27 @@ import ru.softwerke.practice.app2019.model.Bill;
 import ru.softwerke.practice.app2019.storage.Storage;
 import ru.softwerke.practice.app2019.storage.filter.FilterConditional;
 import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
+import ru.softwerke.practice.app2019.utils.Identifier;
 
 import java.util.List;
-import java.util.UUID;
 
-public class BillDataServiceImpl implements BillDataService{
+public class BillServiceImpl implements BillService {
     private Storage<Bill> storage;
 
-    public BillDataServiceImpl(Storage<Bill> storage) {
+    public BillServiceImpl(Storage<Bill> storage) {
         this.storage = storage;
     }
 
     @Override
     public Bill saveBill(Bill bill) {
-        UUID id = UUID.randomUUID();
+        int id = Identifier.nextId();
         bill.setId(id);
         storage.save(bill);
         return bill;
     }
 
     @Override
-    public Bill getBillById(UUID id) {
+    public Bill getBillById(int id) {
         return storage.get(id);
     }
 
@@ -36,11 +36,18 @@ public class BillDataServiceImpl implements BillDataService{
             storageFilter.addCondition(FilterConditional.on(Bill::getClientId).eq(filter.getClientId()));
         }
 
+        if (filter.getDateTime() != null){
+            storageFilter.addCondition(FilterConditional.on(Bill::getDateTime).eq(filter.getDateTime()));
+        }
+
+        if (filter.getTotalPrice() != null){
+            storageFilter.addCondition(FilterConditional.on(Bill::getTotalPrice).eq(filter.getTotalPrice()));
+        }
+
         if (!filter.getDeviceIds().isEmpty()){
-            for (UUID deviceId : filter.getDeviceIds()){
+            for (int deviceId : filter.getDeviceIds()){
                 storageFilter.addCondition(FilterConditional.on((Bill it) -> it.containsDevice(deviceId)).eq(true));
             }
-
         }
 
         storageFilter.addCondition(FilterConditional.on(Bill::getDateTime).inRange(filter.getDateTimeFrom(), filter.getDateTimeTo()));

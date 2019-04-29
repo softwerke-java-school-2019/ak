@@ -1,41 +1,40 @@
 package ru.softwerke.practice.app2019.controller.rest;
 
 import ru.softwerke.practice.app2019.model.Client;
-import ru.softwerke.practice.app2019.service.ClientDataService;
+import ru.softwerke.practice.app2019.service.ClientService;
 import ru.softwerke.practice.app2019.service.ClientFilter;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 
 import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
-@Path("client")
+@Path("customer")
 public class ClientRestController {
-    private ClientDataService clientDataService;
+    private ClientService clientService;
 
     @Inject
-    public ClientRestController(ClientDataService clientDataService) {
-        this.clientDataService = clientDataService;
+    public ClientRestController(ClientService clientService) {
+        this.clientService = clientService;
     }
 
     @GET
-    @Path("/filter")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Client> getClients(@QueryParam("firstName") String firstName,
                                    @QueryParam("lastName") String lastName,
-                                   @QueryParam("patronymic") String patronymic,
-                                   @QueryParam("birthDateFrom") String birthDateFromStr,
-                                   @QueryParam("birthDateTo") String birthDateToStr,
+                                   @QueryParam("middleName") String patronymic,
+                                   @QueryParam("birthdate") String birthDateStr,
+                                   @QueryParam("birthdateFrom") String birthDateFromStr,
+                                   @QueryParam("birthdateTo") String birthDateToStr,
                                    @QueryParam("sortBy") String sortBy,
-                                   @DefaultValue("50") @QueryParam("count") int count,
-                                   @DefaultValue("0") @QueryParam("pageNumber") int pageNumber) {
+                                   @DefaultValue("10") @QueryParam("count") int count,
+                                   @DefaultValue("1") @QueryParam("pageNumber") int pageNumber) {
 
         LocalDate birthDateFrom = ParsingUtil.getLocalDate(birthDateFromStr);
         LocalDate birthDateTo = ParsingUtil.getLocalDate(birthDateToStr);
+        LocalDate birthDate = ParsingUtil.getLocalDate(birthDateStr);
         List<SortConditional> sortConditionals = ParsingUtil.getSortParams(sortBy);
 
         ClientFilter filter = new ClientFilter()
@@ -44,18 +43,13 @@ public class ClientRestController {
                 .withPatronymic(patronymic)
                 .withBirthDateFrom(birthDateFrom)
                 .withBirthDateTo(birthDateTo)
+                .withBirthDate(birthDate)
                 .withSortParams(sortConditionals)
                 .withCount(count)
-                .withPageNumber(pageNumber);
+                .withPageNumber(pageNumber-1);
+        ModelValidator.validateEntity(filter);
+        return clientService.getClients(filter);
 
-        return clientDataService.getClients(filter);
-
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Client> getClients() {
-        return clientDataService.getClients();
     }
 
     @POST
@@ -64,14 +58,14 @@ public class ClientRestController {
     public Client createClient(Client client) {
         QueryValidator.checkEmptyRequest(client);
         ModelValidator.validateEntity(client);
-        return clientDataService.saveClient(client);
+        return clientService.saveClient(client);
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Client getClient(@PathParam("id") UUID id) {
-        Client client = clientDataService.getClientById(id);
+    public Client getClient(@PathParam("id") int id) {
+        Client client = clientService.getClientById(id);
         QueryValidator.checkIfNotFound(client, String.format("Client with id %s doesn't exist", id));
         return client;
     }
