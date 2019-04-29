@@ -43,7 +43,7 @@ public class BillRestController {
                                @QueryParam("totalPrice") BigDecimal totalPrice,
                                @QueryParam("totalPriceFrom") BigDecimal totalPriceFrom,
                                @QueryParam("totalPriceTo") BigDecimal totalPriceTo,
-                               @QueryParam("sortBy") String sortBy,
+                               @QueryParam("orderBy") String sortBy,
                                @DefaultValue("10") @QueryParam("pageItems") int count,
                                @DefaultValue("1") @QueryParam("page") int pageNumber) {
         List<Integer> deviceIds = ParsingUtil.getDeviceIds(deviceIdsStr);

@@ -31,7 +31,7 @@ public class ClientRestController {
                                    @QueryParam("birthdate") String birthDateStr,
                                    @QueryParam("birthdateFrom") String birthDateFromStr,
                                    @QueryParam("birthdateTo") String birthDateToStr,
-                                   @QueryParam("sortBy") String sortBy,
+                                   @QueryParam("orderBy") String sortBy,
                                    @DefaultValue("10") @QueryParam("count") int count,
                                    @DefaultValue("1") @QueryParam("pageNumber") int pageNumber) {
 

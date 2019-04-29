@@ -43,7 +43,7 @@ public class DeviceRestController {
                                    @QueryParam("manufactureDateTo") String dateToStr,
                                    @QueryParam("modelName") String model,
                                    @QueryParam("manufacturer") String manufacturer,
-                                   @QueryParam("sortBy") String sortBy,
+                                   @QueryParam("orderBy") String sortBy,
                                    @DefaultValue("10") @QueryParam("pageItems")int count,
                                    @DefaultValue("1") @QueryParam("page") int pageNumber) {
 
