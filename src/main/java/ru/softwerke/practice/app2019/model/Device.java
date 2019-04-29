@@ -37,7 +37,7 @@ public class Device implements Unique {
     private int id;
 
     @JsonProperty(DEVICE_TYPE_FIELD)
-    @NotNull(message = "Device type may not be null")
+    @NotNull(message = "Received wrong device type")
     private DeviceType deviceType;
 
     @JsonProperty(PRICE_FIELD)
