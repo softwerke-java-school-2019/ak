@@ -6,14 +6,19 @@ import ru.softwerke.practice.app2019.service.ClientService;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
 import ru.softwerke.practice.app2019.utils.ModelValidator;
 import ru.softwerke.practice.app2019.utils.ParsingUtil;
+import ru.softwerke.practice.app2019.utils.QueryValidator;
 
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.QueryParam;
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.util.List;
 
 public class ClientWebHandler {
     private ClientService clientService;
+
+    @Inject
+    public ClientWebHandler(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
     public List<Client> getClients(String firstName,
                                    String lastName,
@@ -39,9 +44,21 @@ public class ClientWebHandler {
                 .withBirthDate(birthDate)
                 .withSortParams(sortConditionals)
                 .withCount(count)
-                .withPageNumber(pageNumber-1);
+                .withPageNumber(pageNumber - 1);
         ModelValidator.validateEntity(filter);
         return clientService.getClients(filter);
+    }
+
+    public Client createClient(Client client) {
+        QueryValidator.checkEmptyRequest(client);
+        ModelValidator.validateEntity(client);
+        return clientService.saveClient(client);
+    }
+
+    public Client getClient(long id) {
+        Client client = clientService.getClientById(id);
+        QueryValidator.checkIfNotFound(client, String.format("Client with id %s doesn't exist", id));
+        return client;
     }
 
 }
