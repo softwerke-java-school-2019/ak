@@ -1,5 +1,7 @@
 package ru.softwerke.practice.app2019.storage.filter;
 
+import java.util.Objects;
+
 public class ComparisonConditional<T extends Comparable<? super T>> implements Conditional<T> {
     private final T value;
     private final Operator operator;
@@ -57,6 +59,25 @@ public class ComparisonConditional<T extends Comparable<? super T>> implements C
         return new ComparisonConditional<>(value, Operator.NOT_EQ);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ComparisonConditional)) return false;
+        ComparisonConditional<?> that = (ComparisonConditional<?>) o;
+        return Objects.equals(value, that.value) &&
+                operator == that.operator;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, operator);
+    }
 
+    @Override
+    public String toString() {
+        return "ComparisonConditional{" +
+                "value=" + value +
+                ", operator=" + operator +
+                '}';
+    }
 }

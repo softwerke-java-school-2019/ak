@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BillFilter {
-    private Integer clientId;
+    private Long clientId;
     private LocalDateTime dateTime;
     private LocalDateTime dateTimeFrom;
     private LocalDateTime dateTimeTo;
     private BigDecimal totalPrice;
     private BigDecimal totalPriceFrom;
     private BigDecimal totalPriceTo;
-    private List<Integer> deviceIds = new ArrayList<>();
+    private List<Long> deviceIds = new ArrayList<>();
     private List<SortConditional> sortConditionals = new ArrayList<>();
     @Max(value = 1000, message = "Too many page items, max value = 1000")
     private int count;
@@ -25,7 +25,7 @@ public class BillFilter {
     @Max(value = 1000000, message = "Page max value = 1000000")
     private int pageNumber;
 
-    public Integer  getClientId() {
+    public Long  getClientId() {
         return clientId;
     }
 
@@ -49,7 +49,7 @@ public class BillFilter {
         return totalPriceTo;
     }
 
-    public List<Integer> getDeviceIds() {
+    public List<Long> getDeviceIds() {
         return deviceIds;
     }
 
@@ -65,7 +65,7 @@ public class BillFilter {
         return pageNumber;
     }
 
-    public BillFilter withClientId(Integer clientId){
+    public BillFilter withClientId(Long clientId){
         this.clientId = clientId;
         return this;
     }
@@ -100,7 +100,7 @@ public class BillFilter {
         return this;
     }
 
-    public BillFilter withDeviceIds(List<Integer> deviceIds){
+    public BillFilter withDeviceIds(List<Long> deviceIds){
         this.deviceIds = deviceIds;
         return this;
     }

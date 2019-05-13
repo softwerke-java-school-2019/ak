@@ -5,7 +5,7 @@ import ru.softwerke.practice.app2019.storage.Unique;
 import java.util.Objects;
 
 public class Color implements Unique, Comparable<Color> {
-    private int id;
+    private long id;
     private String name;
     private Integer rgb;
 
@@ -15,11 +15,11 @@ public class Color implements Unique, Comparable<Color> {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -86,7 +86,7 @@ public class DeviceRestController {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Device getDevice(@PathParam("id") int id) {
+    public Device getDevice(@PathParam("id") long id) {
         Device device = deviceService.getDeviceById(id);
         QueryValidator.checkIfNotFound(device, String.format("Device with id %s doesn't exist", id));
         return device;

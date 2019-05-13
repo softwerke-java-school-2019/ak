@@ -10,6 +10,7 @@ import java.util.List;
 
 public class DeviceServiceImpl implements DeviceService {
     private Storage<Device> storage;
+    private Identifier identifier = new Identifier();
 
     public DeviceServiceImpl(Storage<Device> storage) {
         this.storage = storage;
@@ -17,15 +18,15 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Device saveDevice(Device device) {
-        int id = Identifier.nextId();
+        long id = identifier.nextId();
         device.setId(id);
         storage.save(device);
         return device;
     }
 
     @Override
-    public Device getDeviceById(int id) {
-        return storage.get(id);
+    public Device getDeviceById(long id) {
+        return storage.getById(id);
     }
 
     @Override

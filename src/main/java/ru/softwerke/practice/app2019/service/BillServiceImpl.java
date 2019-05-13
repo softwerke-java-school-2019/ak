@@ -10,6 +10,7 @@ import java.util.List;
 
 public class BillServiceImpl implements BillService {
     private Storage<Bill> storage;
+    private Identifier identifier = new Identifier();
 
     public BillServiceImpl(Storage<Bill> storage) {
         this.storage = storage;
@@ -17,15 +18,15 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill saveBill(Bill bill) {
-        int id = Identifier.nextId();
+        long id = identifier.nextId();
         bill.setId(id);
         storage.save(bill);
         return bill;
     }
 
     @Override
-    public Bill getBillById(int id) {
-        return storage.get(id);
+    public Bill getBillById(long id) {
+        return storage.getById(id);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class BillServiceImpl implements BillService {
         }
 
         if (!filter.getDeviceIds().isEmpty()){
-            for (int deviceId : filter.getDeviceIds()){
+            for (long deviceId : filter.getDeviceIds()){
                 storageFilter.addCondition(FilterConditional.on((Bill it) -> it.containsDevice(deviceId)).eq(true));
             }
         }

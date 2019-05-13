@@ -6,6 +6,7 @@ import ru.softwerke.practice.app2019.storage.filter.sorting.SortableFieldProvide
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class StorageFilter<T> {
     private List<Conditional<T>> conditions = new ArrayList<>();
@@ -51,5 +52,29 @@ public class StorageFilter<T> {
 
     public int getPageNumber() {
         return pageNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StorageFilter)) return false;
+        StorageFilter<?> that = (StorageFilter<?>) o;
+        return count == that.count &&
+                pageNumber == that.pageNumber &&
+                Objects.equals(conditions, that.conditions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(conditions, sortings, count, pageNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "StorageFilter{" +
+                "conditions=" + conditions +
+                ", count=" + count +
+                ", pageNumber=" + pageNumber +
+                '}';
     }
 }

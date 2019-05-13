@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface DeviceService {
     Device saveDevice(Device device);
 
-    Device getDeviceById(int id);
+    Device getDeviceById(long id);
 
     List<Device> getDevices(DeviceFilter filter);
 }

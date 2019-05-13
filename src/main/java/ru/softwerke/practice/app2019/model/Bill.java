@@ -28,11 +28,11 @@ public class Bill implements Unique {
     public static final SortableFieldProvider<Bill> FIELD_PROVIDER = new BillSortableFieldProvider();
 
     @JsonProperty(ID_FIELD)
-    private int id;
+    private long id;
 
     @JsonProperty(CLIENT_ID_FIELD)
     @NotNull(message = "Client's id may not be null")
-    private final int clientId;
+    private final long clientId;
 
     @JsonProperty(ITEMS_LIST_FIELD)
     @NotNull(message = "Bill items may not be null")
@@ -50,7 +50,7 @@ public class Bill implements Unique {
 
     @JsonCreator
     public Bill(
-            @JsonProperty(value = CLIENT_ID_FIELD, required = true) int clientId,
+            @JsonProperty(value = CLIENT_ID_FIELD, required = true) long clientId,
             @JsonProperty(value = ITEMS_LIST_FIELD, required = true) List<BillItem> billItems,
             @JsonProperty(value = DATE_TIME_FIELD, required = false) LocalDateTime dateTime) {
         this.clientId = clientId;
@@ -91,15 +91,15 @@ public class Bill implements Unique {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getClientId() {
+    public long getClientId() {
         return clientId;
     }
 
@@ -115,7 +115,7 @@ public class Bill implements Unique {
         return totalPrice;
     }
 
-    public boolean containsDevice(int id) {
+    public boolean containsDevice(long id) {
         return billItems.stream().anyMatch(billItem -> billItem.getDeviceId() == id);
     }
 

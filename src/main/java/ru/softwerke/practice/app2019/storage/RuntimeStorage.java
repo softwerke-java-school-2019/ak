@@ -27,8 +27,8 @@ public class RuntimeStorage<T extends Unique> implements Storage<T> {
         }
 
         List<Comparator<T>> sorting = filter.getSortings();
-        for (Comparator<T> sort : sorting) {
-            objectStream = objectStream.sorted(sort);
+        for (int i = sorting.size() - 1; i >= 0; i--) {
+            objectStream = objectStream.sorted(sorting.get(i));
         }
 
         int count = filter.getCount();
@@ -40,7 +40,7 @@ public class RuntimeStorage<T extends Unique> implements Storage<T> {
     }
 
     @Override
-    public T get(int id) {
+    public T getById(long id) {
         return objects.stream().filter(object -> object.getId() == id).findFirst().orElse(null);
     }
 }

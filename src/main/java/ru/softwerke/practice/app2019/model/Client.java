@@ -29,23 +29,23 @@ public class Client implements Unique {
 
 
     @JsonProperty(ID_FIELD)
-    private int id;
+    private long id;
 
     @JsonProperty(FIRST_NAME_FIELD)
     @NotNull(message = "First name may not be null")
-    @Pattern(regexp = "[A-ZА-Я][a-zа-я]*", message = "Invalid first name")
+    @Pattern(regexp = "[A-ZА-Яa-zа-я]*", message = "Invalid first name")
     @Length(min = 1, max = 100,  message = "Invalid first name: length must be between 1 and 100")
     private final String firstName;
 
     @JsonProperty(LAST_NAME_FIELD)
     @NotNull(message = "Last name may not be null")
-    @Pattern(regexp = "[A-ZА-Я][a-zа-я]*", message = "Invalid last name")
+    @Pattern(regexp = "[A-ZА-Яa-zа-я]*", message = "Invalid last name")
     @Length(min = 1, max = 100,  message = "Invalid last name: length must be between 1 and 100")
     private final String lastName;
 
     @JsonProperty(PATRONYMIC_FIELD)
     @NotNull(message = "Patronymic may not be null")
-    @Pattern(regexp = "[A-ZА-Я][a-zа-я]*", message = "Invalid patronymic")
+    @Pattern(regexp = "[A-ZА-Яa-zа-я]*", message = "Invalid patronymic")
     @Length(min = 1, max = 100, message = "Invalid patronymic: length must be between 1 and 100")
     private final String patronymic;
 
@@ -67,12 +67,12 @@ public class Client implements Unique {
         this.birthDate = birthDate;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 

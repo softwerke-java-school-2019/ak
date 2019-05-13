@@ -2,6 +2,7 @@ package ru.softwerke.practice.app2019.storage.filter;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class FilterConditional<T, R> implements Conditional<T> {
@@ -57,6 +58,24 @@ public class FilterConditional<T, R> implements Conditional<T> {
         public FilterConditional<T, R> inRange(R from, R to) {
             return cond(new RangeConditional<>(from, to));
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FilterConditional)) return false;
+        FilterConditional<?, ?> that = (FilterConditional<?, ?>) o;
+        return Objects.equals(conditional, that.conditional);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(extractor, conditional);
+    }
+
+    @Override
+    public String toString() {
+        return "FilterConditional{" + conditional + '}';
     }
 }
 

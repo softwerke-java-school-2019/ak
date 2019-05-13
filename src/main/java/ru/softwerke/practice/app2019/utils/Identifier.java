@@ -1,11 +1,11 @@
 package ru.softwerke.practice.app2019.utils;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Identifier {
-    private static AtomicInteger id = new AtomicInteger();
+    private AtomicLong id = new AtomicLong(1);
 
-    public static int nextId(){
+    public long nextId(){
         return id.getAndIncrement();
     }
 }

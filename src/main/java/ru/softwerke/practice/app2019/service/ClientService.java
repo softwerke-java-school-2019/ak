@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface ClientService {
     Client saveClient(Client client);
 
-    Client getClientById(int id);
+    Client getClientById(long id);
 
     List<Client> getClients(ClientFilter filter);
 }

@@ -35,7 +35,7 @@ public class BillRestController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Bill> getBills(@QueryParam("customerId") Integer clientId,
+    public List<Bill> getBills(@QueryParam("customerId") Long clientId,
                                @QueryParam("deviceIds") String deviceIdsStr,
                                @QueryParam("purchaseDateTime") String dateTimeStr,
                                @QueryParam("purchaseDateTimeFrom") String dateTimeFromStr,
@@ -46,7 +46,7 @@ public class BillRestController {
                                @QueryParam("orderBy") String sortBy,
                                @DefaultValue("10") @QueryParam("pageItems") int count,
                                @DefaultValue("1") @QueryParam("page") int pageNumber) {
-        List<Integer> deviceIds = ParsingUtil.getDeviceIds(deviceIdsStr);
+        List<Long> deviceIds = ParsingUtil.getDeviceIds(deviceIdsStr);
         LocalDateTime dateTimeFrom = ParsingUtil.getLocalDateTime(dateTimeFromStr);
         LocalDateTime dateTimeTo = ParsingUtil.getLocalDateTime(dateTimeToStr);
         LocalDateTime dateTime = ParsingUtil.getLocalDateTime(dateTimeStr);
@@ -87,7 +87,7 @@ public class BillRestController {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Bill getBill(@PathParam("id") int id) {
+    public Bill getBill(@PathParam("id") long id) {
         Bill bill = billService.getBillById(id);
         QueryValidator.checkIfNotFound(bill, String.format("Bill with id %s doesn't exist", id));
         return bill;

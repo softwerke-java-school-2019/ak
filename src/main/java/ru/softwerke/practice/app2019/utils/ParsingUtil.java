@@ -77,14 +77,14 @@ public class ParsingUtil {
      * @param deviceIdsStr string to be parsed
      * @return List of ids
      */
-    public static List<Integer> getDeviceIds(String deviceIdsStr){
+    public static List<Long> getDeviceIds(String deviceIdsStr){
         if (deviceIdsStr == null){
             return Collections.emptyList();
         }
-        List<Integer> deviceIds = new ArrayList<>();
+        List<Long> deviceIds = new ArrayList<>();
         String[] params = deviceIdsStr.split(",");
         for (String param : params){
-            deviceIds.add(Integer.parseInt(param));
+            deviceIds.add(Long.parseLong(param));
         }
         return deviceIds;
     }

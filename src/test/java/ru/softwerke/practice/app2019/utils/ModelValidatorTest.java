@@ -1,4 +1,4 @@
-package ru.softwerke.practice.app2019.controller.rest;
+package ru.softwerke.practice.app2019.utils;
 
 import org.junit.jupiter.api.Test;
 import ru.softwerke.practice.app2019.model.Client;

@@ -49,7 +49,7 @@ public class ClientRestController {
                 .withBirthDate(birthDate)
                 .withSortParams(sortConditionals)
                 .withCount(count)
-                .withPageNumber(pageNumber-1);
+                .withPageNumber(pageNumber - 1);
         ModelValidator.validateEntity(filter);
         return clientService.getClients(filter);
 
@@ -67,7 +67,7 @@ public class ClientRestController {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Client getClient(@PathParam("id") int id) {
+    public Client getClient(@PathParam("id") long id) {
         Client client = clientService.getClientById(id);
         QueryValidator.checkIfNotFound(client, String.format("Client with id %s doesn't exist", id));
         return client;

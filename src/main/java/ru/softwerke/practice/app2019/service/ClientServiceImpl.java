@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ClientServiceImpl implements ClientService {
     private Storage<Client> storage;
+    private Identifier identifier = new Identifier();
 
     public ClientServiceImpl(Storage<Client> storage) {
         this.storage = storage;
@@ -17,15 +18,15 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client saveClient(Client client) {
-        int id = Identifier.nextId();
+        long id = identifier.nextId();
         client.setId(id);
         storage.save(client);
         return client;
     }
 
     @Override
-    public Client getClientById(int id) {
-        return storage.get(id);
+    public Client getClientById(long id) {
+        return storage.getById(id);
     }
 
     @Override

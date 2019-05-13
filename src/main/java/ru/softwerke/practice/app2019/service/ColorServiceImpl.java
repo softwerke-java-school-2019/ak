@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ColorServiceImpl implements ColorService {
     private Storage<Color> storage;
+    private Identifier identifier = new Identifier();
 
     public ColorServiceImpl(Storage<Color> storage) {
         this.storage = storage;
@@ -36,7 +37,7 @@ public class ColorServiceImpl implements ColorService {
 
     @Override
     public Color saveColor(Color color) {
-        int id = Identifier.nextId();
+        long id = identifier.nextId();
         color.setId(id);
         storage.save(color);
         return color;

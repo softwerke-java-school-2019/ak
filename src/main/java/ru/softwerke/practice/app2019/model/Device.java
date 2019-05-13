@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Device implements Unique {
     private static final String ID_FIELD = "id";
@@ -34,7 +35,7 @@ public class Device implements Unique {
     public static final SortableFieldProvider<Device> FIELD_PROVIDER = new DeviceSortableFieldProvider();
 
     @JsonProperty(ID_FIELD)
-    private int id;
+    private long id;
 
     @JsonProperty(DEVICE_TYPE_FIELD)
     @NotNull(message = "Received wrong device type")
@@ -94,12 +95,12 @@ public class Device implements Unique {
 
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 

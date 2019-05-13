@@ -16,7 +16,7 @@ public class BillItem {
 
     @JsonProperty(DEVICE_ID_FIELD)
     @NotNull(message = "Device's id may not be null")
-    private final int deviceId;
+    private final long deviceId;
 
     @JsonProperty(QUANTITY_FIELD)
     @Min(1)
@@ -29,7 +29,7 @@ public class BillItem {
 
     @JsonCreator
     public BillItem(
-            @JsonProperty(value = DEVICE_ID_FIELD, required = true) int deviceId,
+            @JsonProperty(value = DEVICE_ID_FIELD, required = true) long deviceId,
             @NotNull @JsonProperty(value = QUANTITY_FIELD, required = true) int quantity,
             @NotNull @JsonProperty(value = PRICE_FIELD, required = true) BigDecimal price) {
         this.deviceId = deviceId;
@@ -61,7 +61,7 @@ public class BillItem {
                 '}';
     }
 
-    public int getDeviceId() {
+    public long getDeviceId() {
         return deviceId;
     }
 
