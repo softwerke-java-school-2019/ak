@@ -27,7 +27,7 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void should_correctly_save_device_and_set_id() {
+    void should_correctly_save_client_and_set_id() {
         Client client = new Client("Ivan", "Ivanov", "Ivanovich", LocalDate.now());
 
         Client saved = clientService.saveClient(client);
@@ -38,7 +38,7 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void should_return_device_by_id() {
+    void should_return_client_by_id() {
         Client client = new Client("Ivan", "Ivanov", "Ivanovich", LocalDate.now());
 
         Client saved = clientService.saveClient(client);
@@ -53,7 +53,7 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void should_not_return_device_by_id() {
+    void should_not_return_client_by_id() {
         Client actual = clientService.getClientById(1);
 
         assertNull(actual);
