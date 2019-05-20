@@ -26,8 +26,8 @@ public class ClientRestController {
                                    @QueryParam("birthdateFrom") String birthDateFromStr,
                                    @QueryParam("birthdateTo") String birthDateToStr,
                                    @QueryParam("orderBy") String sortBy,
-                                   @DefaultValue("10") @QueryParam("count") int count,
-                                   @DefaultValue("1") @QueryParam("pageNumber") int pageNumber) {
+                                   @DefaultValue("10") @QueryParam("pageItems") int count,
+                                   @DefaultValue("1") @QueryParam("page") int pageNumber) {
 
         return clientWebHandler.getClients(firstName, lastName, patronymic, birthDateStr, birthDateFromStr,
                 birthDateToStr, sortBy, count, pageNumber);

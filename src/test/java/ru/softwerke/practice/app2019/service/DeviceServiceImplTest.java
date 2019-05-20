@@ -8,6 +8,7 @@ import ru.softwerke.practice.app2019.model.DeviceType;
 import ru.softwerke.practice.app2019.storage.Storage;
 import ru.softwerke.practice.app2019.storage.filter.FilterConditional;
 import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
+import ru.softwerke.practice.app2019.utils.ModelUtils;
 import ru.softwerke.practice.app2019.utils.ParsingUtil;
 
 import java.math.BigDecimal;
@@ -31,7 +32,7 @@ class DeviceServiceImplTest {
 
     @Test
     void should_correctly_save_device_and_set_id() {
-        Device device = device();
+        Device device = ModelUtils.device();
 
         Device saved = deviceService.saveDevice(device);
 
@@ -42,7 +43,7 @@ class DeviceServiceImplTest {
 
     @Test
     void should_return_device_by_id() {
-        Device device = device();
+        Device device = ModelUtils.device();
 
         Device saved = deviceService.saveDevice(device);
         Mockito.when(storage.getById(anyLong())).thenReturn(saved);
@@ -101,11 +102,5 @@ class DeviceServiceImplTest {
         Mockito.verify(storage).get(eq(storageFilter));
         Mockito.verify(storage).get(argThat((it) -> it.getSortings().size() == 2));
     }
-
-    private static Device device() {
-        return new Device(DeviceType.SMARTWATCHES, BigDecimal.valueOf(2020.50), "Mi Band 2",
-                "Черный", 0, LocalDate.now(), "Xiaomi");
-    }
-
 
 }

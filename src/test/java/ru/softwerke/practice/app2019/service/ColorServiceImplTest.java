@@ -47,14 +47,18 @@ class ColorServiceImplTest {
 
         Color actual = colorService.getColorByName(saved.getName());
 
-        assertEquals(1, colors.size());
+        StorageFilter<Color> storageFilter = new StorageFilter<>();
+        storageFilter.addCondition(FilterConditional.on(Color::getName).eq(name));
+
         assertEquals(colors.get(0), actual);
+        Mockito.verify(storage).get(eq(storageFilter));
     }
 
     @Test
     void should_return_color_by_rgb() {
         String name = "новый";
-        Color color = new Color(name, 12);
+        int rgb = 12;
+        Color color = new Color(name, rgb);
 
         Color saved = colorService.saveColor(color);
         List<Color> colors = Collections.singletonList(saved);
@@ -62,8 +66,11 @@ class ColorServiceImplTest {
 
         Color actual = colorService.getColorByRGB(saved.getRgb());
 
-        assertEquals(1, colors.size());
+        StorageFilter<Color> storageFilter = new StorageFilter<>();
+        storageFilter.addCondition(FilterConditional.on(Color::getRgb).eq(rgb));
+
         assertEquals(colors.get(0), actual);
+        Mockito.verify(storage).get(eq(storageFilter));
     }
 
 

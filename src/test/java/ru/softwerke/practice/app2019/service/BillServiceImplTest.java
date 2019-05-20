@@ -9,6 +9,7 @@ import ru.softwerke.practice.app2019.storage.Storage;
 import ru.softwerke.practice.app2019.storage.filter.FilterConditional;
 import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 import ru.softwerke.practice.app2019.storage.filter.sorting.SortConditional;
+import ru.softwerke.practice.app2019.utils.ModelUtils;
 import ru.softwerke.practice.app2019.utils.ParsingUtil;
 
 import java.math.BigDecimal;
@@ -27,15 +28,13 @@ class BillServiceImplTest {
 
     @BeforeEach
     void setUp() {
+        //is it really necessary?..
         Mockito.reset(storage);
     }
 
     @Test
     void should_correctly_save_bill_and_set_id() {
-        List<BillItem> billItems = new ArrayList<>();
-        billItems.add(new BillItem(1, 2, BigDecimal.valueOf(2020.2)));
-        billItems.add(new BillItem(2, 1, BigDecimal.valueOf(2000)));
-        Bill bill = new Bill(1, billItems, LocalDateTime.now());
+        Bill bill = ModelUtils.bill();
 
         Bill saved = billService.saveBill(bill);
 
@@ -45,11 +44,8 @@ class BillServiceImplTest {
     }
 
     @Test
-    void should_return_device_by_id() {
-        List<BillItem> billItems = new ArrayList<>();
-        billItems.add(new BillItem(1, 2, BigDecimal.valueOf(2020.2)));
-        billItems.add(new BillItem(2, 1, BigDecimal.valueOf(2000)));
-        Bill bill = new Bill(1, billItems, LocalDateTime.now());
+    void should_return_bill_by_id() {
+        Bill bill = ModelUtils.bill();
 
         Bill saved = billService.saveBill(bill);
         Mockito.when(storage.getById(anyLong())).thenReturn(saved);
@@ -58,8 +54,17 @@ class BillServiceImplTest {
 
         assertEquals(saved, actual);
 
-        Mockito.verify(storage).save(eq(saved));
+        Mockito.verify(storage).save(eq(saved)); //is it really necessary?..
         Mockito.verify(storage).getById(eq(saved.getId()));
+    }
+
+    @Test
+    void should_not_return_bill_by_id() {
+        Bill actual = billService.getBillById(1);
+
+        assertNull(actual);
+
+        Mockito.verify(storage).getById(1);
     }
 
     @Test
@@ -100,4 +105,6 @@ class BillServiceImplTest {
         Mockito.verify(storage).get(argThat((it) -> it.getSortings().size() == 3));
 
     }
+
+
 }
