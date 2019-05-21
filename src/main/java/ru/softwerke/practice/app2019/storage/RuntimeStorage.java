@@ -33,9 +33,7 @@ public class RuntimeStorage<T extends Unique> implements Storage<T> {
 
         int count = filter.getCount();
         int pageNumber = filter.getPageNumber();
-        if (count > 0) {
-            objectStream = objectStream.skip(pageNumber * count).limit(count);
-        }
+        objectStream = objectStream.skip(pageNumber * count).limit(count);
         return objectStream.collect(Collectors.toList());
     }
 

@@ -8,58 +8,10 @@
     <script src="js/shop.js"></script>
 </head>
 <body>
-	<div class="container m-auto">
-		<div class="row">
-			<div class="col-4 m-1">
-				Фамилия: <br>
-				<input type="text" name="lastName" id="lastName"><br>
-				Имя: <br>
-				<input type="text" name="firstName" id="firstName"><br>
-				Отчество: <br>
-				<input type="text" name="middleName" id="middleName"><br>
-				Дата рождения: <input type="date" name="birthdate" id="birthdate"> 
-				<br>
-				<button onclick="createCustomer()">Добавить нового клиента</button>
-				<br>
-				<p><textarea rows="10" cols="30" name="response" id="responsePost"></textarea></p>
-			</div>
-			<div class="col-4 m-1">
-				<button onclick="getCustomers()">Вывести всех клиентов</button><br>
-				<button onclick="getCustomerById()">Вывести клиента по id</button> <br>
-				id: <input type="number" name="customerId" id="customerId" value=1 min="1"><br>
-				<textarea rows="25" cols="30" name="response" id="responseGet"></textarea>
-			</div>
-			<div class="col-3 m-1">
-				Параметры отображения: <br>
-				Количество элементов на странице: <br>
-				<input type="number" name="countPages" id="countPages" value=10 min="1" ><br>
-				Номер страницы:  <br>
-				<input type="number" name="pageNumber" id="pageNumber" value=1 min="1" max="1000"> <br>
-				Параметры поиска:<br>
-				Фамилия: <br>
-				<input type="text" name="lastName" id="lastNameParam"><br>
-				Имя: <br>
-				<input type="text" name="firstName" id="firstNameParam"><br>
-				Отчество: <br>
-				<input type="text" name="middleName" id="middleNameParam"><br>
-				Дата рождения: <input type="date" name="birthdate" id="birthdateParam"> 
-				<br>
-				Дата рождения в период: <br>
-				с <input type="date" name="birthDate" id="birthdateFrom"> <br> 
-				по <input type="date" name="birthDate" id="birthdateTo"> <br>
-				Параметры сортировки: <br>
-				<select id="sortBy">
-				  <option value="firstName">По имени</option>
-				  <option value="lastName">По фамилии</option>
-				  <option value="middleName">По отчеству</option>
-				  <option value="birthdate">По дате рождения</option>
-				</select><br>
-				<input type="radio" name="order" id="asc">ASC <br>
-				<input type="radio" name="order" id="desc">DESC
-				<button onclick="addSorting()">Добавить в параметры сортировки</button>
-				<button onclick="cleanSorting()">Сбросить параметры сортировки</button>
-			</div>
-		</div>
-	</div>
+	<div class="container">
+		<a href="pages/NewCustomer.html" class="text-info">Добавить нового клиента</a>
+		<br>
+		<a href="pages/GetCustomers.html" class="text-info">Поиск по клиентам</a>
+	</div>	
 </body>
 </html>

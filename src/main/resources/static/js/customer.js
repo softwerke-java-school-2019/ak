@@ -1,5 +1,6 @@
 const url = "http://localhost:8080/api/customer";
 let sorting = "";
+
 function createCustomer() {
 		let firstName = document.getElementById("firstName").value;
 		let lastName = document.getElementById("lastName").value;
@@ -13,26 +14,17 @@ function createCustomer() {
 			lastName : lastName,
 			middleName : middleName,
 			birthdate : birthdate
-	    }, 
-	    {
-	    	//responseType: 'json',
-		    headers : {
-			'Accept': 'application/json'}
-		}).then(response => {
+	    }).then(response => {
 	    	console.log(response);
-	    	let resJson = JSON.parse(response.config.data);
-	    	console.log(resJson["firstName"]);
-	        responseTextArea.textContent = resJson["lastName"] + "\n" + resJson["firstName"] + "\n"
-	         + resJson["middleName"] + "\n" + resJson["birthdate"];
+			responseTextArea.textContent = printCustomer(response.data);
 
 	    }).catch(error => {
 	    	console.log(error);
 	    	console.log(error.response);
 	        if (error.response) {
-	        	responseTextArea.textContent = error.response.status + " " + error.response.statusText;
-	            responseTextArea.textContent += JSON.stringify(error.response.data);
+	            alert(error.response.status + " " + error.response.statusText + "\n" + error.response.data["error"]["message"]);
 	        } else {
-	            responseTextArea.textContent = error;
+	            alert(error);
 	        }
 	    })
 }
@@ -40,54 +32,61 @@ function createCustomer() {
 function getCustomers() {
 	let responseTextArea = document.getElementById("responseGet");
 	let params = "";
-	if (document.getElementById("firstNameParam").value != "") {
-		params += "firstName=" + document.getElementById("firstNameParam").value;
+	let firstNameParam = document.getElementById("firstNameParam").value;
+	let lastNameParam = document.getElementById("lastNameParam").value;
+	let middleNameParam = document.getElementById("middleNameParam").value;
+	let birthdateParam = document.getElementById("birthdateParam").value;
+	let birthdateFrom = document.getElementById("birthdateFrom").value;
+	let birthdateTo = document.getElementById("birthdateTo").value;
+	let page = document.getElementById("page").value;
+	let pageItems = document.getElementById("pageItems").value;
+	if (firstNameParam != "") {
+		params += "firstName=" + firstNameParam;
 	}
-	if (document.getElementById("lastNameParam").value != "") {
+	if (lastNameParam != "") {
 		if (params != ""){
 			params += "&";
 		}
-		params += "lastName=" + document.getElementById("lastNameParam").value;
+		params += "lastName=" + lastNameParam;
 	}
-	if (document.getElementById("middleNameParam").value != "") {
+	if (middleNameParam != "") {
 		if (params != ""){
 			params += "&";
 		}
-		params += "middleName=" + document.getElementById("middleNameParam").value;
+		params += "middleName=" + middleName;
 	}
-	if (document.getElementById("birthdateParam").value != "") {
+	if (birthdateParam != "") {
 		if (params != ""){
 			params += "&";
 		}
-		let date = new Date(document.getElementById("birthdateParam").value);
+		let date = new Date(birthdateParam);
 		let birthdate = date.toLocaleDateString("ru");
 		params += "birthdate=" + birthdate;
 	}
-	if (document.getElementById("birthdateFrom").value != "") {
+	if (birthdateFrom != "") {
 		if (params != ""){
 			params += "&";
 		}
-		let date = new Date(document.getElementById("birthdateFrom").value);
+		let date = new Date(birthdateFrom);
 		let birthdate = date.toLocaleDateString("ru");
 		params += "birthdateFrom=" + birthdate;
 	}
-	if (document.getElementById("birthdateTo").value != "") {
+	if (birthdateTo != "") {
 		if (params != ""){
 			params += "&";
 		}
-		let date = new Date(document.getElementById("birthdateTo").value);
+		let date = new Date(birthdateTo);
 		let birthdate = date.toLocaleDateString("ru");
 		params += "birthdateTo=" + birthdate;
 	}
 	if (params != ""){
 		params += "&";
 	} 
-	params = "?" + params + "page=" + document.getElementById("pageNumber").value + "&" +
-				"pageItems=" + document.getElementById("countPages").value;
+	params = "?" + params + "page=" + page + "&" + "pageItems=" + pageItems;
 	if (sorting != "") {
 		params += "&orderBy=" + sorting;
 	}
-	console.log(url+params);
+	console.log(url + params);
 
 	axios.get(url+params).then(response => {
 		console.log(response);
@@ -99,10 +98,9 @@ function getCustomers() {
 			console.log(error);
 	    	console.log(error.response);
 	        if (error.response) {
-	        	responseTextArea.textContent = error.response.status + " " + error.response.statusText;
-	            responseTextArea.textContent += JSON.stringify(error.response.data);
+	            alert(error.response.status + " " + error.response.statusText + "\n" + error.response.data["error"]["message"]);
 	        } else {
-	            responseTextArea.textContent = error;
+	            alert(error);
 	        }
 	    })
 }
@@ -118,21 +116,20 @@ function getCustomerById(){
 	        console.log(error);
 	    	console.log(error.response);
 	        if (error.response) {
-	        	responseTextArea.textContent = error.response.status + " " + error.response.statusText;
-	            responseTextArea.textContent += JSON.stringify(error.response.data);
+	            alert(error.response.status + " " + error.response.statusText + "\n" + error.response.data["error"]["message"]);
 	        } else {
-	            responseTextArea.textContent = error;
+	            alert(error);
 	        }
 	    })
 }
 
 function printCustomer(customer){
-	return "{ \n" +
-		   "  firstName : " + customer["firstName"] + ", \n" +
-		   "  lastName : " + customer["lastName"] + ", \n" +
-		   "  middleName : " + customer["middleName"] + ", \n" +
-		   "  birthdate : " + customer["birthdate"] + ", \n" +
-		   "  id : " + customer["id"] + "\n}\n";
+	return "\n" +
+		   "  Имя : " + customer["firstName"] + "\n" +
+		   "  Фамилия : " + customer["lastName"] + "\n" +
+		   "  Отчество : " + customer["middleName"] + "\n" +
+		   "  Дата рождения : " + customer["birthdate"] + "\n" +
+		   "  id : " + customer["id"] + "\n\n";
 }
 
 function addSorting(){
@@ -141,13 +138,19 @@ function addSorting(){
 	}
 	let e = document.getElementById("sortBy");
 	let param = e.options[e.selectedIndex].value;
-
-	if (document.getElementById("desc").checked){
+	let sortParamsTextArea = document.getElementById("sortParams");
+	sortParamsTextArea.textContent += e.options[e.selectedIndex].text + " ";
+	if (document.getElementById("desc").checked) {
 		param = "-" + param;
+		sortParamsTextArea.textContent += "по убыванию \n";
+	}else {
+		sortParamsTextArea.textContent += "по возрастанию \n";
 	}
 	sorting += param;
 }
 
 function cleanSorting(){
+	let sortParamsTextArea = document.getElementById("sortParams");
+	sortParamsTextArea.textContent = "";
 	sorting = "";
 }

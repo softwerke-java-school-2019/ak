@@ -20,6 +20,7 @@ public class BillFilter {
     private List<Long> deviceIds = new ArrayList<>();
     private List<SortConditional> sortConditionals = new ArrayList<>();
     @Max(value = 1000, message = "Too many page items, max value = 1000")
+    @Min(value = 1, message = "Too few page items, min value = 1")
     private int count;
     @Min(value = 0, message = "Page min value = 1")
     @Max(value = 1000000, message = "Page max value = 1000000")
