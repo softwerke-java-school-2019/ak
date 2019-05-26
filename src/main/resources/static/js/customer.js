@@ -1,5 +1,6 @@
 const url = "http://localhost:8080/api/customer";
 let sorting = "";
+let params = "";
 
 function createCustomer() {
 		let firstName = document.getElementById("firstName").value;
@@ -31,7 +32,7 @@ function createCustomer() {
 
 function getCustomers() {
 	let responseTextArea = document.getElementById("responseGet");
-	let params = "";
+	params = "";
 	let firstNameParam = document.getElementById("firstNameParam").value;
 	let lastNameParam = document.getElementById("lastNameParam").value;
 	let middleNameParam = document.getElementById("middleNameParam").value;

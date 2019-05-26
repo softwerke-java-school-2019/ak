@@ -30,6 +30,7 @@ function checkColor() {
 }
 
 function createDevice() {
+		params = "";
 		let e = document.getElementById("deviceType");
 		let deviceType = e.options[e.selectedIndex].value;
 		let modelName = document.getElementById("modelName").value;
@@ -75,9 +76,9 @@ function getDevices() {
 	let manufactureDateParam = document.getElementById("manufactureDateParam").value;
 	let manufactureDateFrom = document.getElementById("manufactureDateFrom").value;
 	let manufactureDateTo = document.getElementById("manufactureDateTo").value;
-	let colorRGB = document.getElementById("colorParam").value;
+	let colorRGB = document.getElementById("color").value;
 	let colorRGBIntParam = parseInt(colorRGB.replace("#", ""), 16);
-	let colorNameParam = document.getElementById("colorNameParam").value;
+	let colorNameParam = document.getElementById("colorName").value;
 	let priceParam = document.getElementById("priceParam").value;
 	let priceFrom = document.getElementById("priceFrom").value;
 	let priceTo = document.getElementById("priceTo").value;
