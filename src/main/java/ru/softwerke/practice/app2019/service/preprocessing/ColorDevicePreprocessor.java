@@ -25,7 +25,7 @@ public class ColorDevicePreprocessor implements Preprocessor<Device> {
         Color foundByRgbColor = colorService.getColorByRGB(color.getRgb());
         if (foundByRgbColor == null & foundByNameColor == null) {
             color = colorService.saveColor(color);
-        } else if (foundByRgbColor != null & foundByNameColor != null & foundByNameColor.getRgb().equals(color.getRgb())) {
+        } else if (foundByRgbColor != null && foundByNameColor != null && foundByNameColor.getRgb().equals(color.getRgb())) {
             color.setId(foundByNameColor.getId());
         } else {
             Response response = Response

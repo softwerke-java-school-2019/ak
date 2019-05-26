@@ -6,8 +6,10 @@ import ru.softwerke.practice.app2019.storage.filter.FilterConditional;
 import ru.softwerke.practice.app2019.storage.filter.StorageFilter;
 import ru.softwerke.practice.app2019.utils.Identifier;
 
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public class ColorServiceImpl implements ColorService {
     private Storage<Color> storage;
     private Identifier identifier = new Identifier();

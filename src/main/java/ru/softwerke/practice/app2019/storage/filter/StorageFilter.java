@@ -11,8 +11,8 @@ import java.util.Objects;
 public class StorageFilter<T> {
     private List<Conditional<T>> conditions = new ArrayList<>();
     private List<Comparator<T>> sortings = new ArrayList<>();
-    private int count;
-    private int pageNumber;
+    private int count = Integer.MAX_VALUE;
+    private int pageNumber = 0;
 
     public List<Conditional<T>> getConditions() {
         return conditions;

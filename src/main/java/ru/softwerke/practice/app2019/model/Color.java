@@ -1,15 +1,27 @@
 package ru.softwerke.practice.app2019.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.softwerke.practice.app2019.storage.Unique;
 
 import java.util.Objects;
 
 public class Color implements Unique, Comparable<Color> {
+    private static final String ID_FIELD = "id";
+    private static final String NAME_FIELD = "name";
+    private static final String RGB_FIELD = "rgb";
+
+    @JsonProperty(ID_FIELD)
     private long id;
+
+    @JsonProperty(NAME_FIELD)
     private String name;
+
+    @JsonProperty(RGB_FIELD)
     private Integer rgb;
 
-    public Color(String name, Integer rgb) {
+    @JsonCreator
+    public Color(@JsonProperty(value = NAME_FIELD) String name, @JsonProperty(value = RGB_FIELD) Integer rgb) {
         this.name = name;
         this.rgb = rgb;
     }

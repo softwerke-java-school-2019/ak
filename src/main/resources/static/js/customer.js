@@ -40,45 +40,14 @@ function getCustomers() {
 	let birthdateTo = document.getElementById("birthdateTo").value;
 	let page = document.getElementById("page").value;
 	let pageItems = document.getElementById("pageItems").value;
-	if (firstNameParam != "") {
-		params += "firstName=" + firstNameParam;
-	}
-	if (lastNameParam != "") {
-		if (params != ""){
-			params += "&";
-		}
-		params += "lastName=" + lastNameParam;
-	}
-	if (middleNameParam != "") {
-		if (params != ""){
-			params += "&";
-		}
-		params += "middleName=" + middleName;
-	}
-	if (birthdateParam != "") {
-		if (params != ""){
-			params += "&";
-		}
-		let date = new Date(birthdateParam);
-		let birthdate = date.toLocaleDateString("ru");
-		params += "birthdate=" + birthdate;
-	}
-	if (birthdateFrom != "") {
-		if (params != ""){
-			params += "&";
-		}
-		let date = new Date(birthdateFrom);
-		let birthdate = date.toLocaleDateString("ru");
-		params += "birthdateFrom=" + birthdate;
-	}
-	if (birthdateTo != "") {
-		if (params != ""){
-			params += "&";
-		}
-		let date = new Date(birthdateTo);
-		let birthdate = date.toLocaleDateString("ru");
-		params += "birthdateTo=" + birthdate;
-	}
+
+	addParam("firstName=", firstNameParam);
+	addParam("lastName=", lastNameParam);
+	addParam("middleName=", middleNameParam);
+	addParam("birthdate=", dateRu(birthdateParam));
+	addParam("birthdateFrom=", dateRu(birthdateFrom));
+	addParam("birthdateTo=", dateRu(birthdateTo));
+
 	if (params != ""){
 		params += "&";
 	} 
@@ -130,6 +99,23 @@ function printCustomer(customer){
 		   "  Отчество : " + customer["middleName"] + "\n" +
 		   "  Дата рождения : " + customer["birthdate"] + "\n" +
 		   "  id : " + customer["id"] + "\n\n";
+}
+
+function dateRu(date){
+	if (date != ""){
+		return new Date(date).toLocaleDateString("ru");
+	} else {
+		return "";
+	}	
+}
+
+function addParam(paramName, paramValue){
+	if (paramValue != "") {
+		if (params != ""){
+			params += "&";
+		}
+		params += paramName + paramValue;
+	}
 }
 
 function addSorting(){
