@@ -31,13 +31,12 @@ public class ModelValidatorTest {
     @Test
     public void validateBadClientWithDateNull() {
         client = new Client("Ng", "N", "Ng", null);
-        ModelValidator.validateEntity(client);
         assertFalse(validate(client));
     }
 
     @Test
     public void validateBadClientWithWrongFirstName() {
-        client = new Client("g", "N", "Ng", LocalDate.now());
+        client = new Client("ASdg6", "N", "Ng", LocalDate.now());
         assertFalse(validate(client));
     }
 

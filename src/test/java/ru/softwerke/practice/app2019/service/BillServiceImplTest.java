@@ -28,7 +28,6 @@ class BillServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        //is it really necessary?..
         Mockito.reset(storage);
     }
 
