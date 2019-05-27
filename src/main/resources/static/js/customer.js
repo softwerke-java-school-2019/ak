@@ -95,8 +95,8 @@ function getCustomerById(){
 
 function printCustomer(customer){
 	return "\n" +
-		   "  Имя : " + customer["firstName"] + "\n" +
 		   "  Фамилия : " + customer["lastName"] + "\n" +
+		   "  Имя : " + customer["firstName"] + "\n" +
 		   "  Отчество : " + customer["middleName"] + "\n" +
 		   "  Дата рождения : " + customer["birthdate"] + "\n" +
 		   "  id : " + customer["id"] + "\n\n";

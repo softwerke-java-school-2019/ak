@@ -23,18 +23,18 @@
 				по <input type="datetime-local" name="purchaseDateTimeTo" id="purchaseDateTimeTo"> <br>
 				Сумма покупки: <br>
 				<input type="number" name="totalPrice" id="totalPriceParam" min="0.00" step="0.10"><br>
-				Цена в диапазоне: <br>
+				Сумма в диапазоне: <br>
 				от <input type="number" name="totalPrice" id="totalPriceFrom" min="0.00" step="0.10"> <br> 
 				по <input type="number" name="totalPrice" id="totalPriceTo" min="0.00" step="0.10"> <br>
 				
 			</div>
-			<div class="col-5 m-1">
+			<div class="col-6 m-1">
 				<button onclick="getBills()">Вывести все чеки</button><br>
 				<button onclick="getBillById()">Вывести чек по id</button> <br>
 				id: <input type="number" name="billId" id="billId" value=1 min="1"><br>
-				<textarea rows="25" cols="60" name="response" id="responseGet"></textarea>
+				<textarea rows="25" cols="70" name="response" id="responseGet"></textarea>
 			</div>
-			<div class="col-3 m-1">
+			<div class="col-2 m-1">
 				<h5>Параметры отображения:</h5>
 				Количество элементов на странице: <br>
 				<input type="number" name="pageItems" id="pageItems" value=10 min="1" ><br>

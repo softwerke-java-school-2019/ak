@@ -145,12 +145,12 @@ function getBills() {
 	    })
 }
 
-function getCustomerById(){
+function getBillById(){
 	let id = document.getElementById("billId").value;
 	console.log(url+"/"+ id);
 	axios.get(url+"/"+ id).then(response => {
 		console.log(response);
-		responseTextAreaGet.textContent = printCustomer(response.data);
+		responseTextAreaGet.textContent = printBill(response.data);
 	}).catch(error => {
 	        console.log(error);
 	    	console.log(error.response);
